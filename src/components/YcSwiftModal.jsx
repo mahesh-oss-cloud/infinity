@@ -44,10 +44,10 @@ export const YcSwiftModal = ({ isOpen, onClose, transaction }) => {
             </div>
             <div>
               <h3 className="text-xl font-normal text-gray-950 font-instrument">
-                Fedwire Funds Transfer Confirmation (W27)
+                Y Combinator W27 Investment Details
               </h3>
               <p className="text-[11px] text-gray-500">
-                Official Y Combinator W27 Standard Deal SAFE Deposit
+                Y Combinator W27 Standard Deal SAFE investment record
               </p>
             </div>
           </div>
@@ -69,7 +69,7 @@ export const YcSwiftModal = ({ isOpen, onClose, transaction }) => {
               <CheckCircle2 className="w-6 h-6 stroke-[2.5]" />
             </div>
             <div className="text-[11px] font-bold text-gray-700 uppercase tracking-wider font-mono">
-              FUNDS SETTLED & CLEARED • Y COMBINATOR W27
+              INVESTMENT RECORD • Y COMBINATOR W27
             </div>
             <div className="text-4xl sm:text-5xl font-normal text-gray-950 mt-1 font-instrument">
               $500,000.00 <span className="text-sm font-sans font-semibold text-gray-500">USD</span>
@@ -86,7 +86,7 @@ export const YcSwiftModal = ({ isOpen, onClose, transaction }) => {
           {/* Actual YC Deal Legal Term Sheet Box */}
           <div className="p-4 rounded-2xl bg-amber-50/70 border border-amber-200 text-xs mb-5 space-y-2 font-waldenburg">
             <span className="text-[10px] text-amber-900 font-bold uppercase tracking-wider block font-waldenburg">
-              Actual Y Combinator Standard Investment Structure
+              Y Combinator Standard Deal Investment Structure
             </span>
             <div className="grid grid-cols-2 gap-2 text-gray-900">
               <div className="p-2.5 rounded-xl bg-white border border-amber-100">
@@ -146,7 +146,7 @@ export const YcSwiftModal = ({ isOpen, onClose, transaction }) => {
           {/* Compliance & Security badge */}
           <div className="pt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
             <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Federal Reserve Bank Wire Network Settlement Verified</span>
+            <span>Bank confirmation is not connected to this dashboard.</span>
           </div>
 
           {/* Action buttons */}
@@ -164,7 +164,7 @@ export const YcSwiftModal = ({ isOpen, onClose, transaction }) => {
               className="py-3 rounded-xl bg-gray-950 hover:bg-black text-white font-bold text-xs transition-all cursor-pointer flex items-center justify-center gap-2 shadow-xs"
             >
               <Printer className="w-4 h-4" />
-              <span>Print / Download Slip</span>
+              <span>Print / Download Details</span>
             </button>
           </div>
 
