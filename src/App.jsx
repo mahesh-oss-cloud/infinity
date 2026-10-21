@@ -449,7 +449,7 @@ export function App() {
           setSelectedTx(ycTx);
           setIsYcModalOpen(true);
         }}
-        onOpenInstall={() => setIsInstallModalOpen(true)}
+        onOpenInstall={isNativeOfflineApp ? undefined : () => setIsInstallModalOpen(true)}
       />
 
     </div>
