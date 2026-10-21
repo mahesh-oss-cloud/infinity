@@ -31,17 +31,17 @@ export const INITIAL_ACCOUNT_DATA = {
   bankAddress: '555 California St, Suite 400, San Francisco, CA 94104',
   fdicInsurance: '$5,000,000 (Via Mercury Vault Multi-Bank Sweep Network)',
   
-  // Real YC Deal Treasury Split
+  // Account balance summary. Treasury value is an allocation until a provider is connected.
   checkingBalance: 74324.00,
-  treasuryYieldBalance: 450000.00, // $450k of YC W27 funds allocated to US Treasury Money Market
-  treasuryApy: '5.02% APY',
-  treasuryFundName: 'Vanguard Treasury Money Market Fund (VUSXX)',
-  monthlyTreasuryYieldEstimate: 1882.50, // ~$1,882/mo passive yield on idle cash
+  treasuryYieldBalance: 450000.00,
+  treasuryApy: 'Not connected',
+  treasuryFundName: 'Treasury allocation',
+  monthlyTreasuryYieldEstimate: 0.00,
 
-  // Total balance: $524,324.00 (Includes $500,000 standard YC investment)
+  // $500,000 YC receipt + $24,324 incoming transfer = $524,324 total.
   balance: 524324.00,
-  monthlyIncreaseRate: '25.7%',
-  growthLabel: 'Cash Reserve & Treasury Growth',
+  monthlyIncreaseRate: '2 credits',
+  growthLabel: 'Incoming funding',
   cardBrand: 'mastercard',
 
   // YC Standard Deal Breakdown
@@ -122,38 +122,40 @@ export const SAVINGS_PLANS = [
   },
 ];
 
-// Initial YC W27 investment record for account activity.
+// Incoming funding records entered from the account holder's supplied details.
 export const INITIAL_TRANSACTIONS = [
+  {
+    id: 'tx-anupam-mittal-24324',
+    title: 'Anupam Mittal',
+    subtitle: 'Incoming bank transfer',
+    category: 'Incoming transfer',
+    amount: 24324.00,
+    type: 'BANK_TRANSFER_IN',
+    direction: 'credit',
+    date: '10/20/26',
+    timestamp: '2026-10-20T12:00:00Z',
+    status: 'Received · recorded manually',
+    sender: { name: 'Anupam Mittal' },
+    bankReference: 'SBINH22149832104',
+    recordSource: 'Account holder entry',
+    memo: 'Incoming transfer received on October 20, 2026.',
+    brandIcon: 'person',
+    isAnupamMittalTransfer: true,
+  },
   {
     id: 'tx-yc-w27-500k',
     title: 'Y Combinator',
-    subtitle: 'W27 Batch Standard Investment • Fedwire Inward Funds Transfer',
+    subtitle: 'W27 Standard Deal · Incoming investment',
     category: 'Venture Capital',
     amount: 500000.00,
-    type: 'FEDWIRE_INWARD',
+    type: 'INVESTMENT_IN',
     direction: 'credit',
-    date: '01/15/27 - 09.30',
-    timestamp: '2027-01-15T09:30:00Z',
-    status: 'Investment recorded',
-    sender: {
-      name: 'Y COMBINATOR LLC',
-      address: '335 Pioneer Way, Mountain View, CA 94041, USA',
-      bank: 'Silicon Valley Bank, a division of First Citizens Bank',
-      swiftCode: 'SVBKUS6S',
-      routingNumber: '121140399',
-    },
-    beneficiary: {
-      name: 'Blackbird Finance Inc.',
-      account: '718940291845',
-      bank: 'Choice Financial Group (Mercury)',
-      swiftCode: 'MERCUS33XXX',
-      routingNumber: '121000358',
-    },
-    swiftReference: 'YC-W27-FEDWIRE-500K-89210',
-    imad: '20270115B1Q8472900192',
-    omad: '20270115B1Q8472900192',
-    busFunctionCode: 'BTR', // Fedwire Bank Transfer
-    memo: 'Y Combinator W27 Batch SAFE: $125k for 7% (Post-Money SAFE) + $375k Uncapped MFN SAFE ($500,000.00 Total)',
+    date: '10/07/26',
+    timestamp: '2026-10-07T12:00:00Z',
+    status: 'Received · recorded manually',
+    sender: { name: 'Y Combinator' },
+    recordSource: 'Account holder entry',
+    memo: '$125,000 post-money SAFE for 7% + $375,000 uncapped MFN SAFE.',
     brandIcon: 'yc',
     isYCombinator: true,
   },
