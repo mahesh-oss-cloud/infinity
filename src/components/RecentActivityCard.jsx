@@ -24,7 +24,7 @@ export const RecentActivityCard = ({ transactions, onSelectTransaction, onSeeMor
           const isDemoTransfer = Boolean(tx.isDemoTransfer);
           const formattedAmount = `${isCredit ? '+' : '-'}$${Math.abs(Number(tx.amount) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
           const detailLabel = isYCombinator
-            ? 'View demo investment details'
+            ? 'View investment details'
             : isDemoTransfer
               ? 'View payment preview'
               : 'View transaction details';
@@ -68,7 +68,7 @@ export const RecentActivityCard = ({ transactions, onSelectTransaction, onSeeMor
                 <div className="mt-3 pt-2.5 border-t border-gray-200 flex flex-wrap items-center justify-between gap-2 text-[11px] text-gray-600">
                   <span className="flex items-center gap-1.5 text-gray-700 font-semibold">
                     <CheckCircle2 className="w-3.5 h-3.5 text-gray-500" />
-                    <span>Demo investment record · not a bank confirmation</span>
+                    <span>Investment record · bank confirmation not linked</span>
                   </span>
                   <span className="text-gray-600 font-semibold group-hover:underline">{detailLabel} →</span>
                 </div>
