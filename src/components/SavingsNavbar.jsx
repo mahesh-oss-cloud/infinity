@@ -16,7 +16,7 @@ export const SavingsNavbar = ({
         {/* Brand Logo & Name in Instrument Serif */}
         <div className="flex items-center gap-2.5 sm:gap-3 cursor-pointer">
           <img
-            src="https://framerusercontent.com/images/NZCnVo54QATCSJPCjPXI4KFLZw.png"
+            src="/infinity-logo.svg"
             alt="Infinity"
             className="w-8.5 h-8.5 sm:w-9 sm:h-9 rounded-xl object-contain"
           />
@@ -55,15 +55,17 @@ export const SavingsNavbar = ({
         {/* Right Action Icons & Avatar */}
         <div className="flex items-center gap-2 sm:gap-3">
           
-          {/* Download / Install App button */}
-          <button
-            onClick={onOpenInstall}
-            className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-semibold transition-all cursor-pointer"
-            title="Download & Install Mobile App (PWA)"
-          >
-            <Download className="w-3.5 h-3.5 text-emerald-700" />
-            <span className="font-waldenburg">Install App</span>
-          </button>
+          {/* Website install prompt is hidden in the standalone APK. */}
+          {onOpenInstall && (
+            <button
+              onClick={onOpenInstall}
+              className="flex items-center gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-full bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 text-emerald-900 text-xs font-semibold transition-all cursor-pointer"
+              title="Install Infinity"
+            >
+              <Download className="w-3.5 h-3.5 text-emerald-700" />
+              <span className="font-waldenburg">Install App</span>
+            </button>
+          )}
 
           {/* US-India Cross-border structuring button */}
           <button
