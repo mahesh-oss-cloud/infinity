@@ -24,19 +24,68 @@ import {
 import { playPaymentSuccessChime } from './utils/audio';
 import { RotateCcw, Scale, Building2, Landmark, CheckCircle2 } from 'lucide-react';
 
+// Browser storage can be unavailable (private browsing, storage restrictions) or contain
+// damaged JSON. Treat storage as optional so it cannot prevent the dashboard from rendering.
+const safeStorageGet = (key) => {
+  try {
+    return window.localStorage.getItem(key);
+  } catch {
+    return null;
+  }
+};
+
+const safeStorageSet = (key, value) => {
+  try {
+    window.localStorage.setItem(key, value);
+  } catch (error) {
+    console.warn('Infinity could not persist local app state:', error);
+  }
+};
+
+const safeStorageRemove = (key) => {
+  try {
+    window.localStorage.removeItem(key);
+  } catch {
+    // Storage is optional; the app should remain usable without it.
+  }
+};
+
+const parseStoredJson = (key) => {
+  const saved = safeStorageGet(key);
+  if (!saved) return null;
+  try {
+    return JSON.parse(saved);
+  } catch {
+    return null;
+  }
+};
+
 export function App() {
   const [activeNavTab, setActiveNavTab] = useState('Treasury & Savings');
 
   // Account State (Blackbird Finance Inc. - US Delaware Parent)
   const [account, setAccount] = useState(() => {
-    // Automatically revert accidental remittance by starting fresh from pristine data
-    const saved = localStorage.getItem('blackbird_account_w27_pristine');
-    return saved ? JSON.parse(saved) : INITIAL_ACCOUNT_DATA;
+    // Merge valid saved data with defaults, and ignore malformed/stale browser state.
+    const saved = parseStoredJson('blackbird_account_w27_pristine');
+    if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return INITIAL_ACCOUNT_DATA;
+
+    return {
+      ...INITIAL_ACCOUNT_DATA,
+      ...saved,
+      parentEntity: { ...INITIAL_ACCOUNT_DATA.parentEntity, ...(saved.parentEntity || {}) },
+      indianSubsidiary: { ...INITIAL_ACCOUNT_DATA.indianSubsidiary, ...(saved.indianSubsidiary || {}) },
+      ycDeal: {
+        ...INITIAL_ACCOUNT_DATA.ycDeal,
+        ...(saved.ycDeal || {}),
+        tranche1: { ...INITIAL_ACCOUNT_DATA.ycDeal.tranche1, ...(saved.ycDeal?.tranche1 || {}) },
+        tranche2: { ...INITIAL_ACCOUNT_DATA.ycDeal.tranche2, ...(saved.ycDeal?.tranche2 || {}) },
+      },
+    };
   });
 
   // Transactions State (Strictly Y Combinator W27!)
   const [transactions, setTransactions] = useState(() => {
-    const saved = localStorage.getItem('blackbird_transactions_w27_pristine');
+    const saved = safeStorageGet('blackbird_transactions_w27_pristine');
     if (!saved) return INITIAL_TRANSACTIONS;
 
     try {
@@ -75,8 +124,8 @@ export function App() {
 
   // Savings Plans State (Startup Treasury Reserves)
   const [plans, setPlans] = useState(() => {
-    const saved = localStorage.getItem('blackbird_plans_w27_pristine');
-    return saved ? JSON.parse(saved) : SAVINGS_PLANS;
+    const saved = parseStoredJson('blackbird_plans_w27_pristine');
+    return Array.isArray(saved) ? saved : SAVINGS_PLANS;
   });
 
   // Modals
@@ -93,22 +142,22 @@ export function App() {
 
   // Revert any old accidental transactions on mount
   useEffect(() => {
-    localStorage.removeItem('blackbird_account_w27');
-    localStorage.removeItem('blackbird_transactions_w27');
-    localStorage.removeItem('blackbird_plans_w27');
+    safeStorageRemove('blackbird_account_w27');
+    safeStorageRemove('blackbird_transactions_w27');
+    safeStorageRemove('blackbird_plans_w27');
   }, []);
 
   // Persistence
   useEffect(() => {
-    localStorage.setItem('blackbird_account_w27_pristine', JSON.stringify(account));
+    safeStorageSet('blackbird_account_w27_pristine', JSON.stringify(account));
   }, [account]);
 
   useEffect(() => {
-    localStorage.setItem('blackbird_transactions_w27_pristine', JSON.stringify(transactions));
+    safeStorageSet('blackbird_transactions_w27_pristine', JSON.stringify(transactions));
   }, [transactions]);
 
   useEffect(() => {
-    localStorage.setItem('blackbird_plans_w27_pristine', JSON.stringify(plans));
+    safeStorageSet('blackbird_plans_w27_pristine', JSON.stringify(plans));
   }, [plans]);
 
   // Handlers
@@ -161,12 +210,12 @@ export function App() {
     setAccount(INITIAL_ACCOUNT_DATA);
     setTransactions(INITIAL_TRANSACTIONS);
     setPlans(SAVINGS_PLANS);
-    localStorage.removeItem('blackbird_account_w27');
-    localStorage.removeItem('blackbird_transactions_w27');
-    localStorage.removeItem('blackbird_plans_w27');
-    localStorage.removeItem('blackbird_account_w27_pristine');
-    localStorage.removeItem('blackbird_transactions_w27_pristine');
-    localStorage.removeItem('blackbird_plans_w27_pristine');
+    safeStorageRemove('blackbird_account_w27');
+    safeStorageRemove('blackbird_transactions_w27');
+    safeStorageRemove('blackbird_plans_w27');
+    safeStorageRemove('blackbird_account_w27_pristine');
+    safeStorageRemove('blackbird_transactions_w27_pristine');
+    safeStorageRemove('blackbird_plans_w27_pristine');
   };
 
   return (
