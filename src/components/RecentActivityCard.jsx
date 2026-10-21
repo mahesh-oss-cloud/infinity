@@ -45,7 +45,7 @@ export const RecentActivityCard = ({ transactions, onSelectTransaction, onSeeMor
             >
               <div className="flex items-start justify-between gap-3">
                 <div className="flex items-center gap-3 min-w-0">
-                  <BrandIcon type={tx.brandIcon} />
+                  <BrandIcon type={tx.brandIcon} imageUrl={tx.sender?.avatarUrl} alt={`${tx.sender?.name || tx.title} profile photo`} />
                   <div className="min-w-0">
                     <div className="flex flex-wrap items-center gap-2">
                       <h4 className="text-base font-normal text-gray-950 truncate group-hover:text-black font-instrument">{tx.title}</h4>
