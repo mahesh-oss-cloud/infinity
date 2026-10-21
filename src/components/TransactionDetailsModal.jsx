@@ -46,6 +46,8 @@ export const TransactionDetailsModal = ({ isOpen, onClose, transaction }) => {
               <span className="text-gray-500">Status</span>
               <span className="font-semibold text-gray-900 text-right">{transaction.status || 'Pending'}</span>
             </div>
+            {transaction.recordSource && <div className="flex items-start justify-between gap-4"><span className="text-gray-500">Record source</span><span className="font-medium text-gray-900 text-right">{transaction.recordSource}</span></div>}
+            {transaction.bankReference && <div className="flex items-start justify-between gap-4"><span className="text-gray-500">Bank reference</span><span className="font-mono text-xs font-semibold text-gray-900 text-right break-all">{transaction.bankReference}</span></div>}
             <div className="flex items-start justify-between gap-4">
               <span className="text-gray-500">Payment type</span>
               <span className="font-semibold text-gray-900 text-right">{transaction.transferMethod || transaction.subtitle || transaction.category || 'Transaction'}</span>
@@ -57,6 +59,13 @@ export const TransactionDetailsModal = ({ isOpen, onClose, transaction }) => {
               </div>
             )}
           </div>
+
+          {transaction.sender && (
+            <div className="rounded-2xl border border-gray-200 p-4 space-y-3">
+              <div className="flex items-center gap-2 text-sm font-semibold text-gray-900"><Landmark className="w-4 h-4 text-gray-500" /> Sender details</div>
+              <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Name</span><span className="font-medium text-gray-900 text-right">{transaction.sender.name}</span></div>
+            </div>
+          )}
 
           {transaction.recipient && (
             <div className="rounded-2xl border border-gray-200 p-4 space-y-3">
