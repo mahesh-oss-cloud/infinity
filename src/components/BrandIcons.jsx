@@ -13,6 +13,12 @@ export const BrandIcon = ({ type, className = "w-10 h-10" }) => {
           </svg>
         </div>
       );
+    case 'person':
+      return (
+        <div className={`${className} rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center text-xs font-bold text-gray-700 flex-shrink-0`} aria-label="Sender initials AM">
+          AM
+        </div>
+      );
     case 'india':
       return (
         <div className={`${className} rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-black shadow-xs flex-shrink-0 text-gray-900`}>
