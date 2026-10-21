@@ -85,12 +85,3 @@ if (rootElement) {
     </StrictMode>,
   )
 }
-
-// Register the PWA service worker in production. Failure to register must not block the app.
-if ('serviceWorker' in navigator && import.meta.env.PROD) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch((err) => {
-      console.warn('Infinity service worker registration failed:', err)
-    })
-  })
-}
