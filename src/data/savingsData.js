@@ -134,7 +134,7 @@ export const INITIAL_TRANSACTIONS = [
     direction: 'credit',
     date: '01/15/27 - 09.30',
     timestamp: '2027-01-15T09:30:00Z',
-    status: 'Cleared & Deposited in US Treasury',
+    status: 'Investment recorded',
     sender: {
       name: 'Y COMBINATOR LLC',
       address: '335 Pioneer Way, Mountain View, CA 94041, USA',
