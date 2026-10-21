@@ -11,7 +11,7 @@ export const MobileBottomNav = ({
 }) => {
   return (
     <nav className="md:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-gray-200/90 px-2 py-2 safe-bottom shadow-[0_-4px_20px_rgba(0,0,0,0.04)]">
-      <div className="grid grid-cols-5 items-center justify-around max-w-md mx-auto">
+      <div className={`grid ${onOpenInstall ? 'grid-cols-5' : 'grid-cols-4'} items-center justify-around max-w-md mx-auto`}>
         
         {/* 1. Home / Overview */}
         <button
@@ -59,14 +59,16 @@ export const MobileBottomNav = ({
           <span className="text-[10px] font-waldenburg">YC $500k</span>
         </button>
 
-        {/* 5. Download / Install App */}
-        <button
-          onClick={onOpenInstall}
-          className="flex flex-col items-center justify-center py-1 px-1 rounded-xl text-emerald-700 hover:text-emerald-900 transition-all cursor-pointer"
-        >
-          <Download className="w-5 h-5 mb-0.5" />
-          <span className="text-[10px] font-waldenburg font-semibold">Install App</span>
-        </button>
+        {/* PWA installation is not needed inside the standalone APK. */}
+        {onOpenInstall && (
+          <button
+            onClick={onOpenInstall}
+            className="flex flex-col items-center justify-center py-1 px-1 rounded-xl text-emerald-700 hover:text-emerald-900 transition-all cursor-pointer"
+          >
+            <Download className="w-5 h-5 mb-0.5" />
+            <span className="text-[10px] font-waldenburg font-semibold">Install App</span>
+          </button>
+        )}
 
       </div>
     </nav>
