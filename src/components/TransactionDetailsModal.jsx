@@ -48,6 +48,10 @@ export const TransactionDetailsModal = ({ isOpen, onClose, transaction }) => {
             </div>
             {transaction.recordSource && <div className="flex items-start justify-between gap-4"><span className="text-gray-500">Record source</span><span className="font-medium text-gray-900 text-right">{transaction.recordSource}</span></div>}
             {transaction.bankReference && <div className="flex items-start justify-between gap-4"><span className="text-gray-500">Bank reference</span><span className="font-mono text-xs font-semibold text-gray-900 text-right break-all">{transaction.bankReference}</span></div>}
+            {transaction.swiftReference && <div className="flex items-start justify-between gap-4"><span className="text-gray-500">Fedwire / transfer reference</span><span className="font-mono text-xs font-semibold text-gray-900 text-right break-all">{transaction.swiftReference}</span></div>}
+            {transaction.imad && <div className="flex items-start justify-between gap-4"><span className="text-gray-500">IMAD</span><span className="font-mono text-xs text-gray-900 text-right break-all">{transaction.imad}</span></div>}
+            {transaction.omad && <div className="flex items-start justify-between gap-4"><span className="text-gray-500">OMAD</span><span className="font-mono text-xs text-gray-900 text-right break-all">{transaction.omad}</span></div>}
+            {transaction.busFunctionCode && <div className="flex items-start justify-between gap-4"><span className="text-gray-500">Fedwire function code</span><span className="font-mono text-xs text-gray-900 text-right">{transaction.busFunctionCode}</span></div>}
             <div className="flex items-start justify-between gap-4">
               <span className="text-gray-500">Payment type</span>
               <span className="font-semibold text-gray-900 text-right">{transaction.transferMethod || transaction.subtitle || transaction.category || 'Transaction'}</span>
@@ -64,6 +68,20 @@ export const TransactionDetailsModal = ({ isOpen, onClose, transaction }) => {
             <div className="rounded-2xl border border-gray-200 p-4 space-y-3">
               <div className="flex items-center gap-2 text-sm font-semibold text-gray-900"><Landmark className="w-4 h-4 text-gray-500" /> Sender details</div>
               <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Name</span><span className="font-medium text-gray-900 text-right">{transaction.sender.name}</span></div>
+              {transaction.sender.address && <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Address</span><span className="font-medium text-gray-900 text-right">{transaction.sender.address}</span></div>}
+              {transaction.sender.bank && <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Bank</span><span className="font-medium text-gray-900 text-right">{transaction.sender.bank}</span></div>}
+              {transaction.sender.swiftCode && <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">SWIFT / BIC</span><span className="font-mono text-xs text-gray-900 text-right">{transaction.sender.swiftCode}</span></div>}
+              {transaction.sender.routingNumber && <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Routing number</span><span className="font-mono text-xs text-gray-900 text-right">{transaction.sender.routingNumber}</span></div>}
+            </div>
+          )}
+          {transaction.beneficiary && (
+            <div className="rounded-2xl border border-gray-200 p-4 space-y-3">
+              <div className="flex items-center gap-2 text-sm font-semibold text-gray-900"><Landmark className="w-4 h-4 text-gray-500" /> Beneficiary details</div>
+              <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Name</span><span className="font-medium text-gray-900 text-right">{transaction.beneficiary.name}</span></div>
+              {transaction.beneficiary.bank && <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Bank</span><span className="font-medium text-gray-900 text-right">{transaction.beneficiary.bank}</span></div>}
+              {transaction.beneficiary.account && <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Account</span><span className="font-mono text-xs text-gray-900 text-right">{transaction.beneficiary.account}</span></div>}
+              {transaction.beneficiary.swiftCode && <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">SWIFT / BIC</span><span className="font-mono text-xs text-gray-900 text-right">{transaction.beneficiary.swiftCode}</span></div>}
+              {transaction.beneficiary.routingNumber && <div className="flex items-start justify-between gap-4 text-sm"><span className="text-gray-500">Routing number</span><span className="font-mono text-xs text-gray-900 text-right">{transaction.beneficiary.routingNumber}</span></div>}
             </div>
           )}
 
