@@ -150,7 +150,7 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
               <p className="text-[11px] text-gray-500">Enter any beneficiary and bank account details</p>
             </div>
           </div>
-          <button type="button" onClick={onClose} aria-label="Close send money" className="p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 shrink-0">
+          <button type="button" onClick={onClose} disabled={isSubmitting} aria-label="Close send money" className="p-2 rounded-full text-gray-400 hover:text-gray-700 hover:bg-gray-100 disabled:opacity-50 shrink-0">
             <X className="w-5 h-5" />
           </button>
         </div>
