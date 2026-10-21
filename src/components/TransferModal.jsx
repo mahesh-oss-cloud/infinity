@@ -146,10 +146,17 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
                 type="text"
                 required
                 value={recipientName}
+                list="known-recipients"
                 onChange={(e) => setRecipientName(e.target.value)}
-                placeholder="e.g. Acme Corporation or Partner"
-                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 focus:outline-none focus:border-purple-500"
+                placeholder="Choose a holder or enter a recipient"
+                className="w-full px-3.5 py-2.5 rounded-xl border border-gray-200 text-sm text-gray-900 focus:outline-none focus:border-gray-500"
               />
+              <datalist id="known-recipients">
+                <option value="Mahesh Bal" />
+                <option value="Saharsh Keerthi" />
+                <option value="Satwik Reddy" />
+                <option value="Arhaan Rahil Mohammed" />
+              </datalist>
             </div>
 
             {/* Routing or SWIFT */}
