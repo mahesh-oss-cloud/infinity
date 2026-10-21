@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-canvas: #f4f6fa;
+    --card-bg: #ffffff;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --border-subtle: #f1f2f6;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  /* Waldenburg Swiss Neo-Grotesque Typeface Style for small textual data, labels & body */
+  font-family: 'Hanken Grotesk', 'Waldenburg', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  letter-spacing: -0.012em;
+  background-color: #f4f6fa;
+  color: #111827;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Headings & Subheadings: Instrument Serif */
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* Typography Classes */
+.font-instrument {
+  font-family: 'Instrument Serif', Georgia, serif !important;
+}
+
+.font-waldenburg {
+  font-family: 'Hanken Grotesk', 'Waldenburg', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  letter-spacing: -0.015em;
+}
+
+/* Mobile-Friendly Safe Area Spacing */
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom, 16px);
+}
+.safe-top {
+  padding-top: env(safe-area-inset-top, 12px);
+}
+
+/* Card aesthetics */
+.dashboard-card {
+  background-color: #ffffff;
+  border-radius: 1.5rem;
+  border: 1px solid #f1f3f7;
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03);
+  transition: all 0.2s ease-in-out;
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f3f7;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

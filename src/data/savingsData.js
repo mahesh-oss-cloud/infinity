@@ -1,0 +1,218 @@
+// Authentic Y Combinator W27 Treasury Data for Blackbird Finance Inc.
+
+export const INITIAL_ACCOUNT_DATA = {
+  companyName: 'Blackbird Finance',
+  batch: 'Y Combinator W27',
+  parentEntity: {
+    legalName: 'Blackbird Finance Inc.',
+    jurisdiction: 'Delaware C-Corporation',
+    delawareFileNo: '7491028',
+    ein: '93-8472910',
+    incorporationDate: 'December 12, 2026',
+    registeredAgent: 'The Corporation Trust Company, 1209 N Orange St, Wilmington, DE 19801',
+  },
+  indianSubsidiary: {
+    legalName: 'Blackbird Finance Private Limited',
+    jurisdiction: 'Bengaluru, Karnataka (Operating Subsidiary)',
+    cin: 'U72900KA2026PTC194821',
+    pan: 'AABCB9182F',
+    bankName: 'HDFC Bank Corporate Banking, Koramangala',
+    accountMasked: '•••• 4921',
+    ifsc: 'HDFC0001234',
+  },
+  // Mercury / Venture Banking Partner
+  bankingPartner: 'Mercury (Choice Financial Group & Evolve Bank Partner Sweep)',
+  accountTitle: 'Delaware C-Corp Treasury & Checking',
+  accountNumberMasked: '**** 7189',
+  fullAccountNumber: '718940291845',
+  routingNumber: '121000358', // ABA Routing Wire & ACH
+  swiftCode: 'MERCUS33XXX',
+  bankName: 'Choice Financial Group / Mercury Sweep Network',
+  bankAddress: '555 California St, Suite 400, San Francisco, CA 94104',
+  fdicInsurance: '$5,000,000 (Via Mercury Vault Multi-Bank Sweep Network)',
+  
+  // Real YC Deal Treasury Split
+  checkingBalance: 74324.00,
+  treasuryYieldBalance: 450000.00, // $450k of YC W27 funds allocated to US Treasury Money Market
+  treasuryApy: '5.02% APY',
+  treasuryFundName: 'Vanguard Treasury Money Market Fund (VUSXX)',
+  monthlyTreasuryYieldEstimate: 1882.50, // ~$1,882/mo passive yield on idle cash
+
+  // Total balance: $524,324.00 (Includes $500,000 standard YC investment)
+  balance: 524324.00,
+  monthlyIncreaseRate: '25.7%',
+  growthLabel: 'Cash Reserve & Treasury Growth',
+  cardBrand: 'mastercard',
+
+  // YC Standard Deal Breakdown
+  ycDeal: {
+    batch: 'Winter 2027 (W27)',
+    totalInvestment: 500000.00,
+    tranche1: {
+      amount: 125000.00,
+      instrument: 'Post-Money SAFE',
+      equityPercent: '7.0%',
+      valuationCap: 'Post-Money SAFE Cap',
+    },
+    tranche2: {
+      amount: 375000.00,
+      instrument: 'Uncapped MFN SAFE',
+      equityPercent: 'MFN (Takes best terms of next SAFE)',
+      valuationCap: 'Uncapped',
+    },
+    agreementDate: 'January 15, 2027',
+  }
+};
+
+// Authentic Startup Treasury Allocation Plans (NO consumer placeholders!)
+export const SAVINGS_PLANS = [
+  {
+    id: 'sp-1',
+    name: 'Payroll & India Runway',
+    allocated: 200000.00,
+    target: 250000.00,
+    category: '12-Month Burn',
+    iconType: 'building',
+    note: 'Intercompany Service Fees (Cost-Plus 10%) for Bengaluru Engineering Team',
+  },
+  {
+    id: 'sp-2',
+    name: 'YC W27 Program & GTM',
+    allocated: 75000.00,
+    target: 100000.00,
+    category: 'Batch Program',
+    iconType: 'rocket',
+    note: 'SF batch attendance, Demo Day roadshow, and customer acquisition',
+  },
+  {
+    id: 'sp-3',
+    name: 'GPU & Cloud Compute',
+    allocated: 50000.00,
+    target: 75000.00,
+    category: 'Infrastructure',
+    iconType: 'cpu',
+    note: 'AWS, Google Cloud & GPU cluster inference runway',
+  },
+  {
+    id: 'sp-4',
+    name: 'Mercury Treasury Vault',
+    allocated: 150000.00,
+    target: 200000.00,
+    category: 'Yield (5.02% APY)',
+    iconType: 'vault',
+    note: 'Idle cash earning daily accrued yield in Vanguard VUSXX',
+  },
+  {
+    id: 'sp-5',
+    name: 'Legal, Tax & Delaware',
+    allocated: 25000.00,
+    target: 30000.00,
+    category: 'Compliance',
+    iconType: 'scale',
+    note: 'Delaware annual franchise tax, 83(b) elections & CA FEMA advisory',
+  },
+  {
+    id: 'sp-6',
+    name: 'Operating Working Capital',
+    allocated: 24324.00,
+    target: 50000.00,
+    category: 'Liquid Checking',
+    iconType: 'layers',
+    note: 'Immediate operational and contractor liquidity',
+  },
+];
+
+// ONLY Y Combinator W27 transaction — all other mock transactions removed as requested!
+export const INITIAL_TRANSACTIONS = [
+  {
+    id: 'tx-yc-w27-500k',
+    title: 'Y Combinator',
+    subtitle: 'W27 Batch Standard Investment • Fedwire Inward Funds Transfer',
+    category: 'Venture Capital',
+    amount: 500000.00,
+    type: 'FEDWIRE_INWARD',
+    direction: 'credit',
+    date: '01/15/27 - 09.30',
+    timestamp: '2027-01-15T09:30:00Z',
+    status: 'Cleared & Deposited in US Treasury',
+    sender: {
+      name: 'Y COMBINATOR LLC',
+      address: '335 Pioneer Way, Mountain View, CA 94041, USA',
+      bank: 'Silicon Valley Bank, a division of First Citizens Bank',
+      swiftCode: 'SVBKUS6S',
+      routingNumber: '121140399',
+    },
+    beneficiary: {
+      name: 'Blackbird Finance Inc.',
+      account: '718940291845',
+      bank: 'Choice Financial Group (Mercury)',
+      swiftCode: 'MERCUS33XXX',
+      routingNumber: '121000358',
+    },
+    swiftReference: 'YC-W27-FEDWIRE-500K-89210',
+    imad: '20270115B1Q8472900192',
+    omad: '20270115B1Q8472900192',
+    busFunctionCode: 'BTR', // Fedwire Bank Transfer
+    memo: 'Y Combinator W27 Batch SAFE: $125k for 7% (Post-Money SAFE) + $375k Uncapped MFN SAFE ($500,000.00 Total)',
+    brandIcon: 'yc',
+    isYCombinator: true,
+  },
+];
+
+export const MONTHLY_CHART_DATA = [
+  { month: 'Jan', value: 500000, heightPercent: 100, isCurrent: true, label: '$500K YC W27' },
+  { month: 'Feb', value: 485000, heightPercent: 92 },
+  { month: 'Mar', value: 465000, heightPercent: 88 },
+  { month: 'Apr', value: 440000, heightPercent: 82 },
+  { month: 'May', value: 415000, heightPercent: 78 },
+  { month: 'Jun', value: 390000, heightPercent: 73 },
+  { month: 'Jul', value: 365000, heightPercent: 68 },
+  { month: 'Aug', value: 340000, heightPercent: 64 },
+  { month: 'Sep', value: 315000, heightPercent: 60 },
+];
+
+// RECENT Real Exchange Rates (Updated for 2026/2027)
+export const CURRENCY_RATES = [
+  {
+    code: 'INR',
+    name: 'Indian Rupee (Subsidiary)',
+    rate: 88.75,
+    flag: 'in',
+    symbol: '₹',
+  },
+  {
+    code: 'EUR',
+    name: 'Euro',
+    rate: 0.91,
+    flag: 'eu',
+    symbol: '€',
+  },
+  {
+    code: 'GBP',
+    name: 'British Pound',
+    rate: 0.76,
+    flag: 'gb',
+    symbol: '£',
+  },
+  {
+    code: 'IDR',
+    name: 'Indonesian Rupiah',
+    rate: 16250.00,
+    flag: 'id',
+    symbol: 'Rp',
+  },
+  {
+    code: 'CNY',
+    name: 'Chinese Yuan',
+    rate: 7.12,
+    flag: 'cn',
+    symbol: '¥',
+  },
+  {
+    code: 'SGD',
+    name: 'Singapore Dollar',
+    rate: 1.31,
+    flag: 'sg',
+    symbol: 'S$',
+  },
+];
