@@ -60,6 +60,12 @@ const parseStoredJson = (key) => {
   }
 };
 
+// Capacitor runs the bundled interface from the local Android WebView.
+const isNativeOfflineApp = typeof window !== 'undefined' && (
+  Boolean(window.Capacitor?.isNativePlatform?.())
+  || (window.location.hostname === 'localhost' && /Android/i.test(window.navigator.userAgent))
+);
+
 export function App() {
   const [activeNavTab, setActiveNavTab] = useState('Treasury & Savings');
 
@@ -176,7 +182,15 @@ export function App() {
       balance: Math.max(0, prev.balance - totalDeducted),
       checkingBalance: Math.max(0, prev.checkingBalance - totalDeducted),
     }));
-    setTransactions(prev => [newTx, ...prev]);
+    const recordedTx = isNativeOfflineApp
+      ? {
+          ...newTx,
+          status: 'Offline record only — not sent to a bank',
+          recordSource: 'Created locally on this device',
+          memo: [newTx.memo, 'This offline entry did not initiate a real payment.'].filter(Boolean).join(' '),
+        }
+      : newTx;
+    setTransactions(prev => [recordedTx, ...prev]);
     playPaymentSuccessChime();
   };
 
@@ -186,7 +200,17 @@ export function App() {
       balance: Math.max(0, prev.balance - numUsd),
       checkingBalance: Math.max(0, prev.checkingBalance - numUsd),
     }));
-    setTransactions(prev => [newTx, ...prev]);
+    const recordedTx = isNativeOfflineApp
+      ? {
+          ...newTx,
+          status: 'Offline record only — remittance not sent',
+          recordSource: 'Created locally on this device',
+          firaAvailable: false,
+          firaId: undefined,
+          note: 'Local planning record only. No bank transfer or regulatory filing was submitted.',
+        }
+      : newTx;
+    setTransactions(prev => [recordedTx, ...prev]);
     playPaymentSuccessChime();
   };
 
@@ -220,13 +244,20 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#f4f6fa] text-gray-900 flex flex-col font-waldenburg antialiased pb-24 md:pb-12">
-      
+      {isNativeOfflineApp && (
+        <div role="status" className="px-4 py-2.5 bg-amber-50 border-b border-amber-200 text-amber-950 text-[11px] leading-relaxed">
+          <strong className="font-bold tracking-wide">OFFLINE LOCAL MODE</strong>
+          <span className="mx-1.5">·</span>
+          Balances and receipts are local records, not bank-verified. Transfers and remittances recorded here do not move money or submit regulatory filings.
+        </div>
+      )}
+
       {/* Top Navbar */}
       <SavingsNavbar
         activeTab={activeNavTab}
         setActiveTab={setActiveNavTab}
         onOpenComplianceRoadmap={() => setIsComplianceOpen(true)}
-        onOpenInstall={() => setIsInstallModalOpen(true)}
+        onOpenInstall={isNativeOfflineApp ? undefined : () => setIsInstallModalOpen(true)}
       />
 
       {/* Main 3-Column Dashboard Container */}
