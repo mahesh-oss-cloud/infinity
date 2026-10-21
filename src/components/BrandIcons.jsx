@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const BrandIcon = ({ type, className = "w-10 h-10" }) => {
+export const BrandIcon = ({ type, className = "w-10 h-10", imageUrl, alt = "Sender profile photo" }) => {
   switch (type) {
     case 'yc':
       return (
@@ -14,8 +14,16 @@ export const BrandIcon = ({ type, className = "w-10 h-10" }) => {
         </div>
       );
     case 'person':
-      return (
-        <div className={`${className} rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center text-xs font-bold text-gray-700 flex-shrink-0`} aria-label="Sender initials AM">
+      return imageUrl ? (
+        <img
+          src={imageUrl}
+          alt={alt}
+          referrerPolicy="no-referrer"
+          className={`${className} rounded-full object-cover border border-gray-200 flex-shrink-0`}
+          onError={(event) => { event.currentTarget.style.display = 'none'; }}
+        />
+      ) : (
+        <div className={`${className} rounded-full bg-gray-200 border border-gray-300 flex items-center justify-center text-xs font-bold text-gray-700 flex-shrink-0`} aria-label="Sender initials">
           AM
         </div>
       );
