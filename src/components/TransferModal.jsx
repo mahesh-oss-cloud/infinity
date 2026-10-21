@@ -164,12 +164,12 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
               <Landmark className="w-4 h-4 text-gray-500 shrink-0" />
               <div>
                 <div className="text-[11px] text-gray-500">Available checking balance</div>
-                <div className="text-lg font-normal font-instrument text-gray-950">$${availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
+                <div className="text-lg font-normal font-instrument text-gray-950">{'$' + availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</div>
               </div>
             </div>
             <div className="text-right shrink-0">
               <div className="text-[10px] text-gray-500">Demo fee</div>
-              <div className="text-sm font-semibold text-gray-800">$${wireFee.toFixed(2)}</div>
+              <div className="text-sm font-semibold text-gray-800">{'$' + wireFee.toFixed(2)}</div>
             </div>
           </div>
 
@@ -186,8 +186,8 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
                 aria-pressed={wireType === method.value}
                 className={`min-w-0 py-2.5 px-1 rounded-xl transition-all ${wireType === method.value ? 'bg-white text-gray-950 shadow-sm' : 'text-gray-500 hover:text-gray-900'}`}
               >
-                <span className="block text-xs font-semibold">${method.label}</span>
-                <span className="block text-[10px] mt-0.5">${method.fee}</span>
+                <span className="block text-xs font-semibold">{method.label}</span>
+                <span className="block text-[10px] mt-0.5">{method.fee}</span>
               </button>
             ))}
           </div>
@@ -232,9 +232,9 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
             </div>
 
             <div>
-              <label htmlFor="bank-routing" className="block text-xs font-semibold text-gray-700 mb-1">${wireType === 'swift' ? 'SWIFT / BIC code *' : 'ABA routing number *'}</label>
+              <label htmlFor="bank-routing" className="block text-xs font-semibold text-gray-700 mb-1">{wireType === 'swift' ? 'SWIFT / BIC code *' : 'ABA routing number *'}</label>
               <input id="bank-routing" type="text" required autoComplete="off" maxLength={11} value={form.routingOrSwift} onChange={(e) => update('routingOrSwift', e.target.value.toUpperCase())} placeholder={wireType === 'swift' ? '8 or 11 characters, e.g. CHASUS33XXX' : '9 digits, e.g. 021000021'} className={`${FIELD_CLASS} font-mono uppercase`} />
-              <p className="mt-1 text-[10px] text-gray-400">${wireType === 'swift' ? 'Format is checked locally; the code is not verified against a bank.' : 'Enter a 9-digit US ABA routing number.'}</p>
+              <p className="mt-1 text-[10px] text-gray-400">{wireType === 'swift' ? 'Format is checked locally; the code is not verified against a bank.' : 'Enter a 9-digit US ABA routing number.'}</p>
             </div>
 
             <div>
@@ -245,7 +245,7 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
 
             <div>
               <label htmlFor="transfer-amount" className="flex items-center justify-between text-xs font-semibold text-gray-700 mb-1">
-                <span>Amount (USD) *</span><span className="font-normal text-gray-400">Plus $${wireFee.toFixed(2)} demo fee</span>
+                <span>Amount (USD) *</span><span className="font-normal text-gray-400">Plus {'$' + wireFee.toFixed(2)} demo fee</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-gray-400">$</span>
@@ -280,9 +280,9 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
             )}
 
             <div className="rounded-xl border border-gray-200 bg-gray-50 p-3.5 space-y-2 text-xs">
-              <div className="flex items-center justify-between gap-3"><span className="text-gray-500">Demo payment amount</span><span className="font-semibold text-gray-900">$${(Number.isFinite(numAmount) && numAmount > 0 ? numAmount : 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
-              <div className="flex items-center justify-between gap-3"><span className="text-gray-500">Demo fee</span><span className="font-semibold text-gray-900">$${wireFee.toFixed(2)}</span></div>
-              <div className="flex items-center justify-between gap-3 border-t border-gray-200 pt-2"><span className="font-semibold text-gray-700">Total simulated deduction</span><span className="font-bold text-gray-950">$${totalDeduction.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
+              <div className="flex items-center justify-between gap-3"><span className="text-gray-500">Demo payment amount</span><span className="font-semibold text-gray-900">{'$' + (Number.isFinite(numAmount) && numAmount > 0 ? numAmount : 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
+              <div className="flex items-center justify-between gap-3"><span className="text-gray-500">Demo fee</span><span className="font-semibold text-gray-900">{'$' + wireFee.toFixed(2)}</span></div>
+              <div className="flex items-center justify-between gap-3 border-t border-gray-200 pt-2"><span className="font-semibold text-gray-700">Total simulated deduction</span><span className="font-bold text-gray-950">{'$' + totalDeduction.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
             </div>
 
             <button type="submit" disabled={isSubmitting || !form.amount || availableBalance <= 0} className="w-full py-3.5 rounded-xl bg-gray-950 hover:bg-black disabled:opacity-50 text-white font-bold text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2">
