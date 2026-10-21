@@ -60,14 +60,14 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
         particleCount: 50,
         spread: 60,
         origin: { y: 0.6 },
-        colors: ['#6c5ce7', '#a855f7', '#3b82f6'],
+        colors: ['#111827', '#6b7280', '#10b981'],
       });
     }, 1000);
   };
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-      <div className="relative w-full max-w-md overflow-hidden rounded-3xl bg-white border border-gray-200 shadow-2xl">
+      <div className="relative w-full max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto overscroll-contain rounded-3xl bg-white border border-gray-200 shadow-2xl">
         
         {/* Header */}
         <div className="flex items-center justify-between p-5 border-b border-gray-100 bg-gray-50/50">
@@ -94,8 +94,10 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
         </div>
 
         {/* Body */}
-        <div className="p-6">
+        <div className="p-5 sm:p-6">
           
+          <div className="mb-4 rounded-xl border border-gray-200 bg-gray-50 px-3 py-2.5 text-[11px] leading-relaxed text-gray-600">Demo workspace only. This form records a local transaction preview; it does not send real money or connect to a bank.</div>
+
           {/* Wire Type Selector */}
           <div className="grid grid-cols-3 gap-2 p-1 rounded-2xl bg-gray-100 mb-5">
             <button
