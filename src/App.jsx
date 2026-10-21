@@ -210,7 +210,7 @@ export function App() {
                 </span>
               </div>
               <p className="text-[11px] text-gray-500 mt-0.5 font-waldenburg">
-                Venture Bank: <strong>{account.bankingPartner}</strong> • $500,000 YC W27 Cleared • Treasury Yield: <strong className="font-instrument text-xs text-gray-900">{account.treasuryApy}</strong>
+                Venture Bank: <strong>{account.bankingPartner}</strong> • $500,000 YC W27 Investment Record • Treasury Yield: <strong className="font-instrument text-xs text-gray-900">{account.treasuryApy}</strong>
               </p>
             </div>
           </div>
