@@ -1,0 +1,93 @@
+name: Build Infinity Offline Android APK
+
+on:
+  push:
+    branches:
+      - android-offline-apk
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build-apk:
+    name: Build installable offline APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - name: Check out Android app branch
+        uses: actions/checkout@v4
+        with:
+          ref: android-offline-apk
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android platform and build tools
+        run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
+      - name: Install web dependencies
+        run: npm ci
+
+      - name: Install Capacitor build tools without changing project dependencies
+        run: npm install --no-save --package-lock=false @capacitor/core@7 @capacitor/cli@7 @capacitor/android@7
+
+      - name: Build offline web bundle
+        run: npm run build
+
+      - name: Generate Android project and bundle app assets
+        run: |
+          npx cap add android
+          npx cap sync android
+
+      - name: Apply offline-only Android manifest and app icon
+        run: node scripts/prepare-offline-android.mjs
+
+      - name: Build APK
+        run: |
+          cd android
+          chmod +x gradlew
+          ./gradlew assembleDebug --no-daemon
+
+      - name: Verify APK and no Internet permission
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="android/app/build/outputs/apk/debug/app-debug.apk"
+          test -s "$APK"
+          MANIFEST="$(find android/app/build/intermediates -type f -name AndroidManifest.xml | grep 'merged_manifest' | head -n 1 || true)"
+          if [ -z "$MANIFEST" ]; then
+            echo "::error::Merged manifest was not found, cannot verify offline permission."
+            exit 1
+          fi
+          if grep -q 'android.permission.INTERNET' "$MANIFEST"; then
+            echo "::error::Internet permission is still present in the merged APK manifest."
+            exit 1
+          fi
+          mkdir -p output
+          cp "$APK" output/Infinity-Offline.apk
+          sha256sum output/Infinity-Offline.apk > output/Infinity-Offline.apk.sha256
+          ls -lh output/Infinity-Offline.apk
+          cat output/Infinity-Offline.apk.sha256
+
+      - name: Upload installable APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: infinity-offline-apk
+          path: |
+            output/Infinity-Offline.apk
+            output/Infinity-Offline.apk.sha256
+          if-no-files-found: error
+          retention-days: 30
