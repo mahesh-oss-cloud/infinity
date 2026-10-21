@@ -1,4 +1,5 @@
 import React from 'react';
+import '@fontsource-variable/orbitron/wght.css';
 import { Search, Bell, Scale, Download } from 'lucide-react';
 
 export const SavingsNavbar = ({ 
@@ -13,7 +14,7 @@ export const SavingsNavbar = ({
     <header className="w-full bg-white border-b border-gray-200/80 px-4 sm:px-10 py-3.5 mb-4 sm:mb-6 sticky top-0 z-30 shadow-[0_1px_4px_rgba(0,0,0,0.02)]">
       <div className="max-w-[1440px] mx-auto flex items-center justify-between">
         
-        {/* Brand Logo & Name in Instrument Serif */}
+        {/* Brand logo wordmark */}
         <div className="flex items-center gap-2.5 sm:gap-3 cursor-pointer">
           <img
             src="https://framerusercontent.com/images/NZCnVo54QATCSJPCjPXI4KFLZw.png"
@@ -22,7 +23,7 @@ export const SavingsNavbar = ({
           />
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-2xl sm:text-3xl font-normal text-gray-950 tracking-tight font-instrument">
+              <span className="text-2xl sm:text-3xl font-normal text-gray-950 tracking-tight font-orbitron">
                 Infinity
               </span>
               <span className="hidden sm:inline-block text-[10px] px-2 py-0.5 rounded-md bg-gray-100 text-gray-700 font-semibold border border-gray-200 font-waldenburg">
