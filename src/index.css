@@ -75,3 +75,48 @@ h1, h2, h3, h4, h5, h6 {
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
+
+
+/* Focused responsive refinements for small screens; preserve existing visual system. */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-padding-top: 5rem;
+}
+button, input, select, textarea {
+  touch-action: manipulation;
+}
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+input, select, textarea {
+  max-width: 100%;
+}
+@media (max-width: 767px) {
+  body {
+    min-width: 320px;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  #root {
+    width: 100%;
+    min-height: 100dvh;
+    overflow-x: clip;
+  }
+  main {
+    min-width: 0;
+  }
+  .safe-bottom {
+    padding-bottom: max(12px, env(safe-area-inset-bottom));
+  }
+  .safe-top {
+    padding-top: max(8px, env(safe-area-inset-top));
+  }
+  button, input, select, textarea {
+    font-size: max(16px, 1em);
+  }
+  [role="dialog"] {
+    max-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom) - 16px);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+}
