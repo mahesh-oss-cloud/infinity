@@ -43,23 +43,31 @@ export function App() {
       const parsed = JSON.parse(saved);
       if (!Array.isArray(parsed)) return INITIAL_TRANSACTIONS;
 
-      return parsed.map((tx) => {
-        if (tx?.direction !== 'debit' || !tx?.recipient) return tx;
+      const canonicalIds = new Set(INITIAL_TRANSACTIONS.map((tx) => tx.id));
+      const savedAdditionalTransactions = parsed
+        .filter((tx) => !canonicalIds.has(tx?.id))
+        .map((tx) => {
+          if (tx?.direction !== 'debit' || !tx?.recipient) return tx;
 
-        const normalized = { ...tx };
-        delete normalized.isDemoTransfer;
-        delete normalized.demoReference;
+          const normalized = { ...tx };
+          delete normalized.isDemoTransfer;
+          delete normalized.demoReference;
 
-        const timestamp = tx.timestamp ? new Date(tx.timestamp).getTime() : 0;
-        return {
-          ...normalized,
-          id: String(tx.id || `tx-transfer-out-${timestamp || 1}`).replace('tx-demo-out-', 'tx-transfer-out-'),
-          type: 'TRANSFER_OUT',
-          status: 'Pending',
-          isOutgoingTransfer: true,
-          transferReference: tx.transferReference || `TRF-${String(timestamp || Date.now()).slice(-8)}`,
-        };
-      });
+          const timestamp = tx.timestamp ? new Date(tx.timestamp).getTime() : 0;
+          return {
+            ...normalized,
+            id: String(tx.id || `tx-transfer-out-${timestamp || 1}`).replace('tx-demo-out-', 'tx-transfer-out-'),
+            type: 'TRANSFER_OUT',
+            status: 'Pending',
+            isOutgoingTransfer: true,
+            transferReference: tx.transferReference || `TRF-${String(timestamp || Date.now()).slice(-8)}`,
+          };
+        });
+
+      // Always refresh the two canonical incoming funding records, even when this
+      // browser already has an older saved activity list.
+      return [...INITIAL_TRANSACTIONS, ...savedAdditionalTransactions]
+        .sort((a, b) => new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime());
     } catch {
       return INITIAL_TRANSACTIONS;
     }
