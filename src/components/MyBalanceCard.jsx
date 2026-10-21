@@ -9,7 +9,8 @@ export const MyBalanceCard = ({
   onOpenRemitToIndia 
 }) => {
   // Format currency with commas: e.g. $524,324
-  const formattedBalance = Math.round(account.balance).toLocaleString('en-US');
+  const totalBalance = Number(account.checkingBalance || 0) + Number(account.treasuryYieldBalance || 0);
+  const formattedBalance = Math.round(totalBalance).toLocaleString('en-US');
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-7 border border-gray-200/80 shadow-[0_2px_15px_rgba(0,0,0,0.02)]">
@@ -21,7 +22,7 @@ export const MyBalanceCard = ({
             Total Liquid Balance
           </h3>
           <span className="text-[11px] text-gray-900 font-medium font-waldenburg">
-            Delaware C-Corp • Mercury Treasury
+            Delaware C-Corp • Funding Account
           </span>
         </div>
 
@@ -57,7 +58,7 @@ export const MyBalanceCard = ({
           <span className="font-instrument text-sm">{account.monthlyIncreaseRate}</span>
         </div>
         <span className="text-xs text-gray-500 font-waldenburg">
-          YC W27 Inflow + Treasury Accrual
+          Y Combinator + incoming transfer
         </span>
       </div>
 
@@ -72,7 +73,7 @@ export const MyBalanceCard = ({
         <div className="flex justify-between items-center pt-1.5 border-t border-gray-200/60">
           <span className="text-gray-900 font-medium flex items-center gap-1.5 font-waldenburg">
             <Landmark className="w-3.5 h-3.5 text-gray-700" />
-            <span>Idle Cash Treasury (5.02% APY):</span>
+            <span>Treasury allocation:</span>
           </span>
           <span className="font-normal text-gray-900 font-instrument text-base">
             ${Math.round(account.treasuryYieldBalance).toLocaleString('en-US')}
