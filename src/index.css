@@ -38,6 +38,13 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Instrument Serif', Georgia, serif !important;
 }
 
+/* Used only for the Infinity wordmark in the top navigation. */
+.font-orbitron {
+  font-family: 'Orbitron Variable', 'Orbitron', sans-serif !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.01em !important;
+}
+
 .font-waldenburg {
   font-family: 'Hanken Grotesk', 'Waldenburg', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   letter-spacing: -0.015em;
