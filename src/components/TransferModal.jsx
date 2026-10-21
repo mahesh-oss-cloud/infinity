@@ -75,7 +75,11 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
       setError('Enter a 9-digit ABA routing number for ACH or Fedwire.');
       return;
     }
-    if (!Number.isFinite(numAmount) || numAmount <= 0 || Math.round(numAmount * 100) !== numAmount * 100) {
+    if (form.bankCountry !== 'United States' && wireType !== 'swift') {
+      setError('For a bank outside the United States, select International SWIFT in this demo preview.');
+      return;
+    }
+    if (!Number.isFinite(numAmount) || numAmount <= 0 || Math.abs(Math.round(numAmount * 100) / 100 - numAmount) > 0.000001) {
       setError('Enter a valid amount greater than $0, with no more than 2 decimal places.');
       return;
     }
