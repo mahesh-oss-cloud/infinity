@@ -22,7 +22,6 @@ import {
   INITIAL_TRANSACTIONS 
 } from './data/savingsData';
 import { playPaymentSuccessChime } from './utils/audio';
-import confetti from 'canvas-confetti';
 import { RotateCcw, Scale, Building2, Landmark, CheckCircle2 } from 'lucide-react';
 
 export function App() {
@@ -38,7 +37,32 @@ export function App() {
   // Transactions State (Strictly Y Combinator W27!)
   const [transactions, setTransactions] = useState(() => {
     const saved = localStorage.getItem('blackbird_transactions_w27_pristine');
-    return saved ? JSON.parse(saved) : INITIAL_TRANSACTIONS;
+    if (!saved) return INITIAL_TRANSACTIONS;
+
+    try {
+      const parsed = JSON.parse(saved);
+      if (!Array.isArray(parsed)) return INITIAL_TRANSACTIONS;
+
+      return parsed.map((tx) => {
+        if (tx?.direction !== 'debit' || !tx?.recipient) return tx;
+
+        const normalized = { ...tx };
+        delete normalized.isDemoTransfer;
+        delete normalized.demoReference;
+
+        const timestamp = tx.timestamp ? new Date(tx.timestamp).getTime() : 0;
+        return {
+          ...normalized,
+          id: String(tx.id || `tx-transfer-out-${timestamp || 1}`).replace('tx-demo-out-', 'tx-transfer-out-'),
+          type: 'TRANSFER_OUT',
+          status: 'Pending',
+          isOutgoingTransfer: true,
+          transferReference: tx.transferReference || `TRF-${String(timestamp || Date.now()).slice(-8)}`,
+        };
+      });
+    } catch {
+      return INITIAL_TRANSACTIONS;
+    }
   });
 
   // Savings Plans State (Startup Treasury Reserves)
@@ -124,45 +148,6 @@ export function App() {
     playPaymentSuccessChime();
   };
 
-  const handleSimulateYcWire = () => {
-    const newTx = {
-      id: `tx-yc-w27-${Date.now()}`,
-      title: 'Y Combinator',
-      subtitle: 'W27 Batch Standard Investment • Fedwire Inward Funds Transfer',
-      category: 'Venture Capital',
-      amount: 500000.00,
-      type: 'FEDWIRE_INWARD',
-      direction: 'credit',
-      date: '01/15/27 - 09.30',
-      timestamp: new Date().toISOString(),
-      status: 'Cleared & Deposited in US Treasury',
-      swiftReference: `YC-W27-FEDWIRE-500K-${Math.floor(10000 + Math.random() * 90000)}`,
-      imad: '20270115B1Q8472900192',
-      omad: '20270115B1Q8472900192',
-      busFunctionCode: 'BTR',
-      memo: 'Y Combinator W27 Batch SAFE: $125k for 7% (Post-Money SAFE) + $375k Uncapped MFN SAFE ($500,000.00 Total)',
-      brandIcon: 'yc',
-      isYCombinator: true,
-    };
-
-    setAccount(prev => ({
-      ...prev,
-      balance: prev.balance + 500000,
-      checkingBalance: prev.checkingBalance + 500000,
-    }));
-    setTransactions(prev => [newTx, ...prev]);
-
-    confetti({
-      particleCount: 80,
-      spread: 70,
-      origin: { y: 0.6 },
-      colors: ['#ff6600', '#111827', '#10b981'],
-    });
-
-    playPaymentSuccessChime();
-    setSelectedTx(newTx);
-    setIsYcModalOpen(true);
-  };
 
   const handleResetData = () => {
     setAccount(INITIAL_ACCOUNT_DATA);
@@ -325,7 +310,6 @@ export function App() {
         isOpen={isReceiveOpen}
         onClose={() => setIsReceiveOpen(false)}
         account={account}
-        onSimulateYcWire={handleSimulateYcWire}
       />
 
       {/* 4. Savings Plan Deposit Modal */}

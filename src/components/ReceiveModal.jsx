@@ -8,11 +8,9 @@ import {
   Globe2, 
   Download,
   Share2,
-  Sparkles
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
-export const ReceiveModal = ({ isOpen, onClose, account, onSimulateYcWire }) => {
+export const ReceiveModal = ({ isOpen, onClose, account }) => {
   const [copiedField, setCopiedField] = useState(null);
   const [copiedAll, setCopiedAll] = useState(false);
 
@@ -118,7 +116,7 @@ export const ReceiveModal = ({ isOpen, onClose, account, onSimulateYcWire }) => 
           </div>
 
           {/* Buttons */}
-          <div className="grid grid-cols-2 gap-3 mt-6">
+          <div className="mt-6">
             <button
               onClick={handleCopyAll}
               className="py-3 rounded-xl bg-gray-100 hover:bg-gray-200 text-gray-800 text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-2"
@@ -127,16 +125,6 @@ export const ReceiveModal = ({ isOpen, onClose, account, onSimulateYcWire }) => 
               <span>{copiedAll ? 'Instructions Copied' : 'Copy All Wire Info'}</span>
             </button>
 
-            <button
-              onClick={() => {
-                onClose();
-                onSimulateYcWire && onSimulateYcWire();
-              }}
-              className="py-3 rounded-xl bg-[#6c5ce7] hover:bg-[#5b4bc4] text-white text-xs font-bold transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm shadow-purple-500/20"
-            >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Simulate YC $500k Wire</span>
-            </button>
           </div>
 
         </div>

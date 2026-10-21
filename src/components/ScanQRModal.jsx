@@ -8,7 +8,6 @@ import {
   Coffee, 
   ShoppingBag, 
   Fuel, 
-  Sparkles,
   ArrowRight
 } from 'lucide-react';
 
@@ -17,7 +16,7 @@ export const ScanQRModal = ({ isOpen, onClose, onSelectMerchantForPayment }) => 
 
   if (!isOpen) return null;
 
-  // Merchant presets to simulate scanning in desktop/laptop environments
+  // Suggested merchants provide a fast way to prefill payment details.
   const PRESET_MERCHANTS = [
     {
       id: 'm1',
@@ -57,7 +56,7 @@ export const ScanQRModal = ({ isOpen, onClose, onSelectMerchantForPayment }) => 
     },
   ];
 
-  const handleSimulateScan = (merchant) => {
+  const handleSelectMerchant = (merchant) => {
     setScanning(true);
     setTimeout(() => {
       setScanning(false);
@@ -113,18 +112,18 @@ export const ScanQRModal = ({ isOpen, onClose, onSelectMerchantForPayment }) => 
               <p className="text-xs text-gray-400">Align QR code inside this frame</p>
               {scanning && (
                 <div className="mt-2 text-xs font-semibold text-emerald-400 animate-pulse">
-                  Scanning QR & resolving NPCI VPA...
+                  Opening payment details...
                 </div>
               )}
             </div>
 
           </div>
 
-          {/* Quick Preset Merchant Simulation */}
+          {/* Suggested merchant shortcuts */}
           <div className="mb-4">
             <div className="flex items-center justify-between text-xs font-semibold text-gray-400 mb-2">
-              <span>Quick Test Merchants</span>
-              <span className="text-[10px] text-emerald-400">Tap to Simulate Scan</span>
+              <span>Suggested merchants</span>
+              <span className="text-[10px] text-emerald-400">Select to continue</span>
             </div>
 
             <div className="space-y-2">
@@ -133,7 +132,7 @@ export const ScanQRModal = ({ isOpen, onClose, onSelectMerchantForPayment }) => 
                 return (
                   <button
                     key={m.id}
-                    onClick={() => handleSimulateScan(m)}
+                    onClick={() => handleSelectMerchant(m)}
                     className="w-full flex items-center justify-between p-2.5 rounded-xl bg-white/5 hover:bg-emerald-500/10 border border-white/5 hover:border-emerald-500/30 transition-all cursor-pointer text-left group"
                   >
                     <div className="flex items-center gap-3">
@@ -170,7 +169,7 @@ export const ScanQRModal = ({ isOpen, onClose, onSelectMerchantForPayment }) => 
                 type="file" 
                 accept="image/*" 
                 className="hidden" 
-                onChange={() => handleSimulateScan(PRESET_MERCHANTS[0])} 
+                onChange={() => handleSelectMerchant(PRESET_MERCHANTS[0])} 
               />
             </label>
           </div>

@@ -102,7 +102,7 @@ export const FOUNDERS_DIRECTORY = [
     industry: 'Biotech',
     expertise: ['Computational Biology', 'FDA Regulation', 'Series A Prep', 'IP Strategy'],
     avatar: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80',
-    bio: 'Accelerating antibody discovery via generative chemistry. Raised $4.2M seed post-Demo Day.',
+    bio: 'Accelerating antibody discovery via generative chemistry. Raised $4.2M seed after YC investor day.',
   },
   {
     id: 'fnd-7',
@@ -178,7 +178,7 @@ export const FORUM_THREADS = [
   {
     id: 'thr-2',
     category: 'fundraising',
-    title: 'How we closed our unallocated $375k MFN SAFE tranche before Demo Day without blowing up our cap table',
+    title: 'How we closed our unallocated $375k MFN SAFE tranche before YC investor day without blowing up our cap table',
     content: 'YC gives you $125k for 7% plus the $375k uncapped MFN SAFE. Many angel investors will try to push you into setting a fixed valuation cap before you have leverage. We held firm on the MFN structure until we had 3 lead term sheets. Here is the exact email template we used to reply to VCs asking for early caps.',
     author: {
       name: 'Maya Lin',

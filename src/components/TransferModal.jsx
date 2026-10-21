@@ -3,11 +3,9 @@ import {
   X,
   ArrowRight,
   Building2,
-  ShieldCheck,
   AlertCircle,
   Landmark,
 } from 'lucide-react';
-import confetti from 'canvas-confetti';
 
 const INITIAL_FORM = {
   recipientName: '',
@@ -76,7 +74,7 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
       return;
     }
     if (form.bankCountry !== 'United States' && wireType !== 'swift') {
-      setError('For a bank outside the United States, select International SWIFT in this demo preview.');
+      setError('For a bank outside the United States, select International SWIFT.');
       return;
     }
     if (!Number.isFinite(numAmount) || numAmount <= 0 || Math.abs(Math.round(numAmount * 100) / 100 - numAmount) > 0.000001) {
@@ -84,7 +82,7 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
       return;
     }
     if (totalDeduction > availableBalance) {
-      setError(`The amount plus the demo fee exceeds the available checking balance of $${availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.`);
+      setError(`The amount plus the transfer fee exceeds the available checking balance of $${availableBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.`);
       return;
     }
 
@@ -93,21 +91,21 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
       const now = new Date();
       const date = now.toLocaleDateString('en-US', { month: '2-digit', day: '2-digit', year: '2-digit' })
         + ' - ' + now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
-      const demoReference = `DEMO-${now.getTime().toString().slice(-8)}`;
+      const transferReference = `TRF-${now.getTime().toString().slice(-8)}`;
       const newTx = {
-        id: `tx-demo-out-${now.getTime()}`,
+        id: `tx-transfer-out-${now.getTime()}`,
         title: recipientName,
         subtitle: `${wireTypeLabel} · ${recipientBank}`,
         category: form.paymentPurpose,
         amount: -Number(numAmount.toFixed(2)),
-        type: 'DEMO_TRANSFER_OUT',
+        type: 'TRANSFER_OUT',
         direction: 'debit',
         date,
         timestamp: now.toISOString(),
-        status: 'Demo preview · recorded locally',
+        status: 'Pending',
         brandIcon: 'transfer',
-        isDemoTransfer: true,
-        demoReference,
+        isOutgoingTransfer: true,
+        transferReference,
         transferMethod: wireTypeLabel,
         fee: wireFee,
         recipientType: form.recipientType,
@@ -128,12 +126,6 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
       onCompleteTransfer(newTx, Number((numAmount + wireFee).toFixed(2)));
       setIsSubmitting(false);
       onClose();
-      confetti({
-        particleCount: 35,
-        spread: 55,
-        origin: { y: 0.6 },
-        colors: ['#111827', '#6b7280', '#10b981'],
-      });
     }, 450);
   };
 
@@ -156,13 +148,6 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
         </div>
 
         <div className="p-4 sm:p-6">
-          <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-3.5 py-3 text-xs leading-relaxed text-amber-950">
-            <div className="flex items-start gap-2">
-              <ShieldCheck className="w-4 h-4 mt-0.5 shrink-0" />
-              <div><strong>Demo preview only.</strong> Confirming records a simulated payment in this browser and updates the demo balance/activity. It does not contact a bank, verify account details, or move real money.</div>
-            </div>
-          </div>
-
           <div className="mb-4 rounded-2xl border border-gray-200 bg-gray-50 p-3.5 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2 min-w-0">
               <Landmark className="w-4 h-4 text-gray-500 shrink-0" />
@@ -172,16 +157,16 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
               </div>
             </div>
             <div className="text-right shrink-0">
-              <div className="text-[10px] text-gray-500">Demo fee</div>
+              <div className="text-[10px] text-gray-500">Transfer fee</div>
               <div className="text-sm font-semibold text-gray-800">{'$' + wireFee.toFixed(2)}</div>
             </div>
           </div>
 
           <div className="grid grid-cols-3 gap-1.5 sm:gap-2 p-1 rounded-2xl bg-gray-100 mb-5">
             {[
-              { value: 'ach', label: 'ACH', fee: 'No demo fee' },
-              { value: 'fedwire', label: 'Fedwire', fee: '$25 demo fee' },
-              { value: 'swift', label: 'SWIFT', fee: '$35 demo fee' },
+              { value: 'ach', label: 'ACH', fee: 'No fee' },
+              { value: 'fedwire', label: 'Fedwire', fee: '$25 fee' },
+              { value: 'swift', label: 'SWIFT', fee: '$35 fee' },
             ].map((method) => (
               <button
                 key={method.value}
@@ -244,12 +229,12 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
             <div>
               <label htmlFor="recipient-account" className="block text-xs font-semibold text-gray-700 mb-1">Recipient account number / IBAN *</label>
               <input id="recipient-account" type="text" required autoComplete="off" maxLength={40} value={form.accountNumber} onChange={(e) => update('accountNumber', e.target.value)} placeholder="Enter account number or IBAN" className={`${FIELD_CLASS} font-mono`} />
-              <p className="mt-1 text-[10px] text-gray-400">Only the last four characters are kept in the local transaction preview.</p>
+              <p className="mt-1 text-[10px] text-gray-400">For your security, only the last four characters appear in transaction history.</p>
             </div>
 
             <div>
               <label htmlFor="transfer-amount" className="flex items-center justify-between text-xs font-semibold text-gray-700 mb-1">
-                <span>Amount (USD) *</span><span className="font-normal text-gray-400">Plus {'$' + wireFee.toFixed(2)} demo fee</span>
+                <span>Amount (USD) *</span><span className="font-normal text-gray-400">Plus {'$' + wireFee.toFixed(2)} transfer fee</span>
               </label>
               <div className="relative">
                 <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-lg font-bold text-gray-400">$</span>
@@ -284,15 +269,14 @@ export const TransferModal = ({ isOpen, onClose, account, onCompleteTransfer }) 
             )}
 
             <div className="rounded-xl border border-gray-200 bg-gray-50 p-3.5 space-y-2 text-xs">
-              <div className="flex items-center justify-between gap-3"><span className="text-gray-500">Demo payment amount</span><span className="font-semibold text-gray-900">{'$' + (Number.isFinite(numAmount) && numAmount > 0 ? numAmount : 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
-              <div className="flex items-center justify-between gap-3"><span className="text-gray-500">Demo fee</span><span className="font-semibold text-gray-900">{'$' + wireFee.toFixed(2)}</span></div>
-              <div className="flex items-center justify-between gap-3 border-t border-gray-200 pt-2"><span className="font-semibold text-gray-700">Total simulated deduction</span><span className="font-bold text-gray-950">{'$' + totalDeduction.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
+              <div className="flex items-center justify-between gap-3"><span className="text-gray-500">Payment amount</span><span className="font-semibold text-gray-900">{'$' + (Number.isFinite(numAmount) && numAmount > 0 ? numAmount : 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
+              <div className="flex items-center justify-between gap-3"><span className="text-gray-500">Transfer fee</span><span className="font-semibold text-gray-900">{'$' + wireFee.toFixed(2)}</span></div>
+              <div className="flex items-center justify-between gap-3 border-t border-gray-200 pt-2"><span className="font-semibold text-gray-700">Total amount debited</span><span className="font-bold text-gray-950">{'$' + totalDeduction.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span></div>
             </div>
 
             <button type="submit" disabled={isSubmitting || !form.amount || availableBalance <= 0} className="w-full py-3.5 rounded-xl bg-gray-950 hover:bg-black disabled:opacity-50 text-white font-bold text-sm transition-all active:scale-[0.98] flex items-center justify-center gap-2">
-              {isSubmitting ? <span>Recording demo transfer…</span> : <><span>Record demo transfer</span><ArrowRight className="w-4 h-4" /></>}
+              {isSubmitting ? <span>Submitting transfer…</span> : <><span>Confirm transfer</span><ArrowRight className="w-4 h-4" /></>}
             </button>
-            <p className="text-center text-[10px] text-gray-400">No external payment is initiated. Never enter real banking credentials in this preview.</p>
           </form>
         </div>
       </div>

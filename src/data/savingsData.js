@@ -82,7 +82,7 @@ export const SAVINGS_PLANS = [
     target: 100000.00,
     category: 'Batch Program',
     iconType: 'rocket',
-    note: 'SF batch attendance, Demo Day roadshow, and customer acquisition',
+    note: 'SF batch attendance, investor meetings, and customer acquisition',
   },
   {
     id: 'sp-3',
@@ -122,7 +122,7 @@ export const SAVINGS_PLANS = [
   },
 ];
 
-// ONLY Y Combinator W27 transaction — all other mock transactions removed as requested!
+// Initial YC W27 investment record for account activity.
 export const INITIAL_TRANSACTIONS = [
   {
     id: 'tx-yc-w27-500k',

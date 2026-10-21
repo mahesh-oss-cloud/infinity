@@ -21,12 +21,12 @@ export const RecentActivityCard = ({ transactions, onSelectTransaction, onSeeMor
         {transactions.map((tx) => {
           const isCredit = Number(tx.amount) > 0;
           const isYCombinator = Boolean(tx.isYCombinator);
-          const isDemoTransfer = Boolean(tx.isDemoTransfer);
+          const isOutgoingTransfer = tx.direction === 'debit' && Boolean(tx.recipient);
           const formattedAmount = `${isCredit ? '+' : '-'}$${Math.abs(Number(tx.amount) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
           const detailLabel = isYCombinator
             ? 'View investment details'
-            : isDemoTransfer
-              ? 'View payment preview'
+            : isOutgoingTransfer
+              ? 'View payment details'
               : 'View transaction details';
 
           return (
@@ -52,7 +52,7 @@ export const RecentActivityCard = ({ transactions, onSelectTransaction, onSeeMor
                       {isYCombinator ? (
                         <span className="text-[10px] px-2 py-0.5 rounded-md bg-[#ff6600] text-white font-bold tracking-wider font-mono shrink-0">W27 BATCH</span>
                       ) : (
-                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-gray-200 text-gray-700 font-semibold tracking-wide shrink-0">{isDemoTransfer ? 'DEMO PREVIEW' : (tx.category || 'ACTIVITY')}</span>
+                        <span className="text-[10px] px-2 py-0.5 rounded-md bg-gray-200 text-gray-700 font-semibold tracking-wide shrink-0">{isOutgoingTransfer ? 'TRANSFER' : (tx.category || 'ACTIVITY')}</span>
                       )}
                     </div>
                     <p className="text-xs text-gray-600 mt-0.5 break-words font-medium font-waldenburg">{tx.subtitle || tx.category || 'Account activity'}</p>
@@ -73,7 +73,7 @@ export const RecentActivityCard = ({ transactions, onSelectTransaction, onSeeMor
                 <div className="mt-3 pt-2.5 border-t border-gray-200 flex flex-wrap items-center justify-between gap-2 text-[11px] text-gray-600">
                   <span className="flex items-center gap-1.5 font-medium min-w-0">
                     <CheckCircle2 className="w-3.5 h-3.5 text-gray-400 shrink-0" />
-                    <span className="break-words">{tx.status || 'Recorded in local preview'}{tx.paymentPurpose ? ` · ${tx.paymentPurpose}` : ''}</span>
+                    <span className="break-words">{tx.status || 'Pending'}{tx.paymentPurpose ? ` · ${tx.paymentPurpose}` : ''}</span>
                   </span>
                   <span className="text-gray-600 font-semibold group-hover:underline shrink-0">{detailLabel} →</span>
                 </div>

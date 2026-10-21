@@ -11,6 +11,7 @@ export const TransactionDetailsModal = ({ isOpen, onClose, transaction }) => {
 
   const isIncoming = Number(transaction.amount) > 0;
   const recipient = transaction.recipient || {};
+  const isOutgoingTransfer = transaction.direction === 'debit' && Boolean(transaction.recipient);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
@@ -32,32 +33,27 @@ export const TransactionDetailsModal = ({ isOpen, onClose, transaction }) => {
 
         <div className="p-4 sm:p-6 space-y-4">
           <div className="rounded-2xl border border-gray-200 bg-gray-50 p-4 text-center">
-            <p className="text-[11px] uppercase tracking-wide text-gray-500">{isIncoming ? 'Incoming transaction preview' : 'Outgoing payment preview'}</p>
+            <p className="text-[11px] uppercase tracking-wide text-gray-500">{isIncoming ? 'Incoming transaction' : 'Outgoing payment'}</p>
             <div className={`mt-1 text-3xl font-normal font-instrument ${isIncoming ? 'text-emerald-700' : 'text-gray-950'}`}>
               {isIncoming ? '+' : '-'}{money(transaction.amount)}
             </div>
             <p className="text-xs text-gray-500 mt-1">{transaction.date || ''}</p>
           </div>
 
-          {transaction.isDemoTransfer && (
-            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3 text-xs leading-relaxed text-amber-950">
-              <strong>Simulated transaction only.</strong> This entry is stored in this browser's demo history. No bank was contacted and no money was transferred.
-            </div>
-          )}
 
           <div className="rounded-2xl border border-gray-200 p-4 space-y-3 text-sm">
             <div className="flex items-start justify-between gap-4">
               <span className="text-gray-500">Status</span>
-              <span className="font-semibold text-gray-900 text-right">{transaction.status || 'Recorded in local preview'}</span>
+              <span className="font-semibold text-gray-900 text-right">{transaction.status || 'Pending'}</span>
             </div>
             <div className="flex items-start justify-between gap-4">
               <span className="text-gray-500">Payment type</span>
               <span className="font-semibold text-gray-900 text-right">{transaction.transferMethod || transaction.subtitle || transaction.category || 'Transaction'}</span>
             </div>
-            {transaction.demoReference && (
+            {transaction.transferReference && (
               <div className="flex items-start justify-between gap-4">
-                <span className="text-gray-500">Demo reference</span>
-                <span className="font-mono text-xs font-semibold text-gray-900 text-right">{transaction.demoReference}</span>
+                <span className="text-gray-500">Transfer reference</span>
+                <span className="font-mono text-xs font-semibold text-gray-900 text-right">{transaction.transferReference}</span>
               </div>
             )}
           </div>
@@ -100,11 +96,11 @@ export const TransactionDetailsModal = ({ isOpen, onClose, transaction }) => {
             </div>
           )}
 
-          {transaction.isDemoTransfer && (
+          {isOutgoingTransfer && (
             <div className="rounded-xl bg-gray-50 border border-gray-200 p-3 space-y-2 text-xs">
               <div className="flex justify-between gap-3"><span className="text-gray-500">Payment amount</span><span className="font-semibold text-gray-900">{money(transaction.amount)}</span></div>
-              <div className="flex justify-between gap-3"><span className="text-gray-500">Demo fee</span><span className="font-semibold text-gray-900">{money(transaction.fee)}</span></div>
-              <div className="pt-2 border-t border-gray-200 flex justify-between gap-3"><span className="font-semibold text-gray-700">Total simulated deduction</span><span className="font-bold text-gray-950">{money(Math.abs(Number(transaction.amount) || 0) + (Number(transaction.fee) || 0))}</span></div>
+              <div className="flex justify-between gap-3"><span className="text-gray-500">Transfer fee</span><span className="font-semibold text-gray-900">{money(transaction.fee)}</span></div>
+              <div className="pt-2 border-t border-gray-200 flex justify-between gap-3"><span className="font-semibold text-gray-700">Total debit</span><span className="font-bold text-gray-950">{money(Math.abs(Number(transaction.amount) || 0) + (Number(transaction.fee) || 0))}</span></div>
             </div>
           )}
 
