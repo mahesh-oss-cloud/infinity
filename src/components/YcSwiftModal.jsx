@@ -6,7 +6,6 @@ import {
   Check, 
   Download, 
   Printer, 
-  ShieldCheck, 
   Building2, 
   FileText,
   Landmark
@@ -141,12 +140,6 @@ export const YcSwiftModal = ({ isOpen, onClose, transaction }) => {
               </div>
             </div>
 
-          </div>
-
-          {/* Compliance & Security badge */}
-          <div className="pt-4 flex items-center justify-center gap-2 text-xs text-gray-500">
-            <ShieldCheck className="w-4 h-4 text-emerald-600" />
-            <span>Bank confirmation is not connected to this dashboard.</span>
           </div>
 
           {/* Action buttons */}
