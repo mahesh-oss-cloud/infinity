@@ -1,0 +1,11 @@
+{
+  "appId": "com.blackbirdfinance.infinity",
+  "appName": "Infinity",
+  "webDir": "dist",
+  "backgroundColor": "#f4f6fa",
+  "android": {
+    "allowMixedContent": false,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": false
+  }
+}
