@@ -72,9 +72,10 @@ export const CurrencyCard = () => {
 
       <div className="space-y-3.5">
         {rates.map((curr) => {
+          const fractionDigits = curr.code === 'IDR' ? 0 : 2;
           const converted = (numBase * curr.rate).toLocaleString('en-US', {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: curr.code === 'IDR' ? 0 : 2,
+            minimumFractionDigits: fractionDigits,
+            maximumFractionDigits: fractionDigits,
           });
           const flags = { in: '🇮🇳', eu: '🇪🇺', gb: '🇬🇧', id: '🇮🇩', cn: '🇨🇳', sg: '🇸🇬' };
           return (
@@ -110,7 +111,7 @@ export const CurrencyCard = () => {
         <h4 className="text-lg font-normal text-gray-950 font-instrument">Account holders</h4>
         <p className="text-[11px] text-gray-500 mt-1 mb-3">Workspace account-holder list</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          {ACCOUNT_HOLDERS.map((name, index) => (
+          {ACCOUNT_HOLDERS.map((name) => (
             <div key={name} className="flex items-center gap-2.5 rounded-xl border border-gray-100 bg-gray-50/70 px-3 py-2.5 min-w-0">
               <span className="w-7 h-7 rounded-full bg-gray-200 text-gray-700 flex items-center justify-center text-[10px] font-bold flex-shrink-0">{name.split(' ').map(part => part[0]).join('').slice(0, 2).toUpperCase()}</span>
               <span className="text-xs font-semibold text-gray-800 truncate">{name}</span>
