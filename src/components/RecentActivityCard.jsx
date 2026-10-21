@@ -65,12 +65,9 @@ export const RecentActivityCard = ({ transactions, onSelectTransaction, onSeeMor
               </div>
 
               {isYCombinator ? (
-                <div className="mt-3 pt-2.5 border-t border-gray-200 flex flex-wrap items-center justify-between gap-2 text-[11px] text-gray-600">
-                  <span className="flex items-center gap-1.5 text-gray-700 font-semibold">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-gray-500" />
-                    <span>Investment record · bank confirmation not linked</span>
-                  </span>
-                  <span className="text-gray-600 font-semibold group-hover:underline">{detailLabel} →</span>
+                <div className="mt-3 pt-2.5 border-t border-amber-200/60 flex flex-wrap items-center justify-between gap-2 text-[11px] text-gray-600">
+                  <span className="font-semibold text-gray-800">Standard Deal: $125k (7%) + $375k MFN SAFE</span>
+                  <span className="text-amber-800 font-semibold group-hover:underline">{detailLabel} →</span>
                 </div>
               ) : (
                 <div className="mt-3 pt-2.5 border-t border-gray-200 flex flex-wrap items-center justify-between gap-2 text-[11px] text-gray-600">
