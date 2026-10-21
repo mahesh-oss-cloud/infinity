@@ -135,7 +135,7 @@ export const INITIAL_TRANSACTIONS = [
     date: '10/20/26',
     timestamp: '2026-10-20T12:00:00Z',
     status: 'Transfer received',
-    sender: { name: 'Anupam Mittal', avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Anupam_Mittal.jpg' },
+    sender: { name: 'Anupam Mittal', avatarUrl: '/avatar-anupam.svg' },
     bankReference: 'SBINH22149832104',
     recordSource: 'Account holder entry',
     memo: 'Incoming transfer received on October 20, 2026.',
