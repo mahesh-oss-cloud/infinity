@@ -8,6 +8,7 @@ import { RecentActivityCard } from './components/RecentActivityCard';
 import { CurrencyCard } from './components/CurrencyCard';
 import { YcSwiftModal } from './components/YcSwiftModal';
 import { TransferModal } from './components/TransferModal';
+import { TransactionDetailsModal } from './components/TransactionDetailsModal';
 import { ReceiveModal } from './components/ReceiveModal';
 import { SavingsPlanModal } from './components/SavingsPlanModal';
 import { AccountDetailsModal } from './components/AccountDetailsModal';
@@ -48,6 +49,7 @@ export function App() {
 
   // Modals
   const [isYcModalOpen, setIsYcModalOpen] = useState(false);
+  const [isTransactionDetailsOpen, setIsTransactionDetailsOpen] = useState(false);
   const [selectedTx, setSelectedTx] = useState(null);
   const [isTransferOpen, setIsTransferOpen] = useState(false);
   const [isReceiveOpen, setIsReceiveOpen] = useState(false);
@@ -80,7 +82,11 @@ export function App() {
   // Handlers
   const handleSelectTransaction = (tx) => {
     setSelectedTx(tx);
-    setIsYcModalOpen(true);
+    if (tx?.isYCombinator) {
+      setIsYcModalOpen(true);
+    } else {
+      setIsTransactionDetailsOpen(true);
+    }
   };
 
   const handleCompleteTransfer = (newTx, totalDeducted) => {
@@ -297,6 +303,12 @@ export function App() {
       <YcSwiftModal
         isOpen={isYcModalOpen}
         onClose={() => setIsYcModalOpen(false)}
+        transaction={selectedTx}
+      />
+
+      <TransactionDetailsModal
+        isOpen={isTransactionDetailsOpen}
+        onClose={() => setIsTransactionDetailsOpen(false)}
         transaction={selectedTx}
       />
 
