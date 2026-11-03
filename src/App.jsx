@@ -17,10 +17,10 @@ import { CrossBorderComplianceModal } from './components/CrossBorderComplianceMo
 import { IntercompanyTransferModal } from './components/IntercompanyTransferModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileAppInstallModal } from './components/MobileAppInstallModal';
-import { 
-  INITIAL_ACCOUNT_DATA, 
-  SAVINGS_PLANS, 
-  INITIAL_TRANSACTIONS 
+import {
+  INITIAL_ACCOUNT_DATA,
+  SAVINGS_PLANS,
+  INITIAL_TRANSACTIONS
 } from './data/savingsData';
 import { playPaymentSuccessChime } from './utils/audio';
 import { RotateCcw, Scale, Building2, Landmark, CheckCircle2 } from 'lucide-react';
@@ -66,7 +66,6 @@ export function App() {
 
   // Account State (Blackbird Finance Inc. - US Delaware Parent)
   const [account, setAccount] = useState(() => {
-    // Merge valid saved data with defaults, and ignore malformed/stale browser state.
     const saved = parseStoredJson('blackbird_account_w27_pristine');
     if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return INITIAL_ACCOUNT_DATA;
 
@@ -84,7 +83,7 @@ export function App() {
     };
   });
 
-  // Transactions State (Strictly Y Combinator W27!)
+  // Transactions State
   const [transactions, setTransactions] = useState(() => {
     const saved = safeStorageGet('blackbird_transactions_w27_pristine');
     if (!saved) return INITIAL_TRANSACTIONS;
@@ -114,8 +113,6 @@ export function App() {
           };
         });
 
-      // Always refresh the two canonical incoming funding records, even when this
-      // browser already has an older saved activity list.
       return [...INITIAL_TRANSACTIONS, ...savedAdditionalTransactions]
         .sort((a, b) => new Date(b.timestamp || 0).getTime() - new Date(a.timestamp || 0).getTime());
     } catch {
@@ -123,7 +120,7 @@ export function App() {
     }
   });
 
-  // Savings Plans State (Startup Treasury Reserves)
+  // Savings Plans State
   const [plans, setPlans] = useState(() => {
     const saved = parseStoredJson('blackbird_plans_w27_pristine');
     return Array.isArray(saved) ? saved : SAVINGS_PLANS;
@@ -206,14 +203,13 @@ export function App() {
     playPaymentSuccessChime();
   };
 
-  // Handle sandbox payout (deduct USD amount)
+  // Sandbox payout handler
   const handlePayout = (usdAmount) => {
     setAccount(prev => ({
       ...prev,
       balance: Math.max(0, prev.balance - usdAmount),
       checkingBalance: Math.max(0, prev.checkingBalance - usdAmount),
     }));
-    // Optionally add a transaction record for the payout
     const newTx = {
       id: `payout-${Date.now()}`,
       type: 'PAYOUT',
@@ -226,21 +222,7 @@ export function App() {
     };
     setTransactions(prev => [newTx, ...prev]);
     playPaymentSuccessChime();
-  }; {
-    setAccount(prev => ({
-      ...prev,
-      balance: Math.max(0, prev.balance - amount),
-      checkingBalance: Math.max(0, prev.checkingBalance - amount),
-    }));
-    setPlans(prev => prev.map(p => {
-      if (p.id === planId) {
-        return { ...p, allocated: p.allocated + amount };
-      }
-      return p;
-    }));
-    playPaymentSuccessChime();
   };
-
 
   const handleResetData = () => {
     setAccount(INITIAL_ACCOUNT_DATA);
@@ -256,7 +238,7 @@ export function App() {
 
   return (
     <div className="min-h-screen bg-[#f4f6fa] text-gray-900 flex flex-col font-waldenburg antialiased pb-24 md:pb-12">
-      
+
       {/* Top Navbar */}
       <SavingsNavbar
         activeTab={activeNavTab}
@@ -267,7 +249,7 @@ export function App() {
 
       {/* Main 3-Column Dashboard Container */}
       <main className="max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-10 flex-1">
-        
+
         {/* Real-world Corporate Structure Banner */}
         <div className="mb-4 sm:mb-6 p-3.5 sm:p-4 rounded-2xl bg-white border border-gray-200/80 shadow-[0_1px_6px_rgba(0,0,0,0.02)] flex flex-col md:flex-row md:items-center justify-between gap-3 sm:gap-4 font-waldenburg">
           <div className="flex items-start sm:items-center gap-3">
@@ -299,7 +281,7 @@ export function App() {
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-900 border border-gray-200 text-xs font-semibold transition-all cursor-pointer font-waldenburg"
             >
               <Scale className="w-3.5 h-3.5 text-gray-700" />
-              <span>CA & Legal Structuring</span>
+              <span>CA &amp; Legal Structuring</span>
             </button>
 
             <button
@@ -325,10 +307,10 @@ export function App() {
           </div>
         </div>
 
-        {/* 3-Column Grid matching reference screenshot */}
+        {/* 3-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
-          
-          {/* LEFT COLUMN: My Balance & Savings Plan (3 cols) */}
+
+          {/* LEFT COLUMN: My Balance, Payout Simulator & Savings Plan (3 cols) */}
           <div className="lg:col-span-3 space-y-5">
             <MyBalanceCard
               account={account}
@@ -337,9 +319,8 @@ export function App() {
               onOpenAccountDetails={() => setIsAccountDetailsOpen(true)}
               onOpenRemitToIndia={() => setIsIntercompanyOpen(true)}
             />
-            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
-            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
 
+            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
 
             <SavingsPlanCard
               plans={plans}
@@ -348,8 +329,6 @@ export function App() {
               }}
               onSeeMore={() => setIsAccountDetailsOpen(true)}
             />
-            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
-
           </div>
 
           {/* MIDDLE COLUMN: Bar Chart & Golden Area Spline Chart (5 cols) */}
@@ -358,15 +337,11 @@ export function App() {
               totalDisplay={`$${Math.round(account.balance).toLocaleString('en-US')}`}
               growthRate={account.monthlyIncreaseRate}
             />
-            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
-
 
             <AreaChartCard
               totalDisplay={`$${Math.round(account.balance).toLocaleString('en-US')}`}
               growthRate={account.monthlyIncreaseRate}
             />
-            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
-
           </div>
 
           {/* RIGHT COLUMN: Recent Activity & Currency Converter (4 cols) */}
@@ -376,8 +351,6 @@ export function App() {
               onSelectTransaction={handleSelectTransaction}
               onSeeMore={() => setIsAccountDetailsOpen(true)}
             />
-            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
-
 
             <CurrencyCard />
           </div>
