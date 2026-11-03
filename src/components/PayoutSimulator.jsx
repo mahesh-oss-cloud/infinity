@@ -46,7 +46,7 @@ export const PayoutSimulator = ({ balance, onPayout }) => {
 
   return (
     <div style={{ border: '1px solid #ccc', padding: '1rem', borderRadius: '8px', marginTop: '1rem' }}>
-      <h3>Sandbox Payout Simulator</h3>
+      <h3>Payout System</h3>
       <p>Current Balance: {formatAmt(balance, 'USD')}</p>
       <div>
         <label>
