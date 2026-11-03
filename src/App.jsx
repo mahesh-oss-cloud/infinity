@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { SavingsNavbar } from './components/SavingsNavbar';
 import { MyBalanceCard } from './components/MyBalanceCard';
+import { PayoutSimulator } from './components/PayoutSimulator';
 import { SavingsPlanCard } from './components/SavingsPlanCard';
 import { BarChartCard } from './components/BarChartCard';
 import { AreaChartCard } from './components/AreaChartCard';
@@ -205,6 +206,41 @@ export function App() {
     playPaymentSuccessChime();
   };
 
+  // Handle sandbox payout (deduct USD amount)
+  const handlePayout = (usdAmount) => {
+    setAccount(prev => ({
+      ...prev,
+      balance: Math.max(0, prev.balance - usdAmount),
+      checkingBalance: Math.max(0, prev.checkingBalance - usdAmount),
+    }));
+    // Optionally add a transaction record for the payout
+    const newTx = {
+      id: `payout-${Date.now()}`,
+      type: 'PAYOUT',
+      direction: 'debit',
+      amount: usdAmount,
+      currency: 'USD',
+      timestamp: new Date().toISOString(),
+      status: 'Success',
+      description: 'Sandbox payout',
+    };
+    setTransactions(prev => [newTx, ...prev]);
+    playPaymentSuccessChime();
+  }; {
+    setAccount(prev => ({
+      ...prev,
+      balance: Math.max(0, prev.balance - amount),
+      checkingBalance: Math.max(0, prev.checkingBalance - amount),
+    }));
+    setPlans(prev => prev.map(p => {
+      if (p.id === planId) {
+        return { ...p, allocated: p.allocated + amount };
+      }
+      return p;
+    }));
+    playPaymentSuccessChime();
+  };
+
 
   const handleResetData = () => {
     setAccount(INITIAL_ACCOUNT_DATA);
@@ -301,6 +337,9 @@ export function App() {
               onOpenAccountDetails={() => setIsAccountDetailsOpen(true)}
               onOpenRemitToIndia={() => setIsIntercompanyOpen(true)}
             />
+            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
+            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
+
 
             <SavingsPlanCard
               plans={plans}
@@ -309,6 +348,8 @@ export function App() {
               }}
               onSeeMore={() => setIsAccountDetailsOpen(true)}
             />
+            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
+
           </div>
 
           {/* MIDDLE COLUMN: Bar Chart & Golden Area Spline Chart (5 cols) */}
@@ -317,11 +358,15 @@ export function App() {
               totalDisplay={`$${Math.round(account.balance).toLocaleString('en-US')}`}
               growthRate={account.monthlyIncreaseRate}
             />
+            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
+
 
             <AreaChartCard
               totalDisplay={`$${Math.round(account.balance).toLocaleString('en-US')}`}
               growthRate={account.monthlyIncreaseRate}
             />
+            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
+
           </div>
 
           {/* RIGHT COLUMN: Recent Activity & Currency Converter (4 cols) */}
@@ -331,6 +376,8 @@ export function App() {
               onSelectTransaction={handleSelectTransaction}
               onSeeMore={() => setIsAccountDetailsOpen(true)}
             />
+            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
+
 
             <CurrencyCard />
           </div>
