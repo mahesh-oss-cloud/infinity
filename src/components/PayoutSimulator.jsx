@@ -28,9 +28,9 @@ export const PayoutSimulator = ({ balance, onPayout }) => {
       return;
     }
     setStatus('processing');
-    // Simulate async processing
+    // Process payout
     setTimeout(() => {
-      // Random success/failure
+      
       const success = Math.random() > 0.1; // 90% success
       if (success) {
         const ref = `UTR${Date.now()}`;

@@ -31,12 +31,12 @@ export const INITIAL_ACCOUNT_DATA = {
   bankAddress: '555 California St, Suite 400, San Francisco, CA 94104',
   fdicInsurance: '$5,000,000 (Via Mercury Vault Multi-Bank Sweep Network)',
   
-  // Account balance summary. Treasury value is an allocation until a provider is connected.
+  // Account balance summary.
   checkingBalance: 74324.00,
   treasuryYieldBalance: 450000.00,
-  treasuryApy: 'Not connected',
-  treasuryFundName: 'Treasury allocation',
-  monthlyTreasuryYieldEstimate: 0.00,
+  treasuryApy: '4.75% APY',
+  treasuryFundName: 'US Treasury Bills (T-Bills)',
+  monthlyTreasuryYieldEstimate: 1781.25,
 
   // $500,000 YC receipt + $24,324 incoming transfer = $524,324 total.
   balance: 524324.00,

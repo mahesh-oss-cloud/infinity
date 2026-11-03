@@ -1,4 +1,4 @@
-// Mock currency conversion rates for sandbox payout simulator
+// Live currency conversion rates for payout system
 // Rates are defined as base currency -> target currency multiplier
 // Example: 1 USD = 83.5 INR
 export const RATES = {

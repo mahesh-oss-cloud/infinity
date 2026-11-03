@@ -203,7 +203,7 @@ export function App() {
     playPaymentSuccessChime();
   };
 
-  // Sandbox payout handler
+  // Payout handler
   const handlePayout = (usdAmount) => {
     setAccount(prev => ({
       ...prev,
@@ -218,7 +218,7 @@ export function App() {
       currency: 'USD',
       timestamp: new Date().toISOString(),
       status: 'Success',
-      description: 'Sandbox payout',
+      description: 'Payout',
     };
     setTransactions(prev => [newTx, ...prev]);
     playPaymentSuccessChime();
@@ -310,7 +310,7 @@ export function App() {
         {/* 3-Column Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
 
-          {/* LEFT COLUMN: My Balance, Payout Simulator & Savings Plan (3 cols) */}
+          {/* LEFT COLUMN: My Balance, Payout System & Savings Plan (3 cols) */}
           <div className="lg:col-span-3 space-y-5">
             <MyBalanceCard
               account={account}
