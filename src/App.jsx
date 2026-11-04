@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { SavingsNavbar } from './components/SavingsNavbar';
 import { MyBalanceCard } from './components/MyBalanceCard';
 import { PayoutSimulator } from './components/PayoutSimulator';
+import { TokenizedAssetManager } from './components/TokenizedAssetManager';
 import { SavingsPlanCard } from './components/SavingsPlanCard';
 import { BarChartCard } from './components/BarChartCard';
 import { AreaChartCard } from './components/AreaChartCard';
@@ -333,6 +334,7 @@ export function App() {
 
           {/* MIDDLE COLUMN: Bar Chart & Golden Area Spline Chart (5 cols) */}
           <div className="lg:col-span-5 space-y-5">
+            <TokenizedAssetManager account={account} onTokenActionComplete={() => playPaymentSuccessChime()} />
             <BarChartCard
               totalDisplay={`$${Math.round(account.balance).toLocaleString('en-US')}`}
               growthRate={account.monthlyIncreaseRate}
