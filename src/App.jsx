@@ -68,7 +68,7 @@ export function App() {
   // Account State (Blackbird Finance Inc. - US Delaware Parent)
   const [account, setAccount] = useState(() => {
     const saved = parseStoredJson('blackbird_account_w27_pristine');
-    if (!saved || typeof saved !== 'object' || Array.isArray(saved)) return INITIAL_ACCOUNT_DATA;
+    if (!saved || typeof saved !== 'object' || Array.isArray(saved) || saved.balance === 524324) return INITIAL_ACCOUNT_DATA;
 
     return {
       ...INITIAL_ACCOUNT_DATA,
@@ -124,7 +124,8 @@ export function App() {
   // Savings Plans State
   const [plans, setPlans] = useState(() => {
     const saved = parseStoredJson('blackbird_plans_w27_pristine');
-    return Array.isArray(saved) ? saved : SAVINGS_PLANS;
+    if (!Array.isArray(saved) || (saved[0] && saved[0].allocated === 200000)) return SAVINGS_PLANS;
+    return saved;
   });
 
   // Modals
