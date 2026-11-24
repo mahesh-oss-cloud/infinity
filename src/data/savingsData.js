@@ -130,6 +130,7 @@ export const INITIAL_TRANSACTIONS = [
     category: 'Venture Capital',
     amount: 46450000.00,
     amountUsd: 500000.00,
+    currency: 'INR',
     conversionRate: 92.90,
     type: 'FEDWIRE_INWARD',
     direction: 'credit',

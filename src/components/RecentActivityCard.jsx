@@ -22,7 +22,10 @@ export const RecentActivityCard = ({ transactions, onSelectTransaction, onSeeMor
           const isCredit = Number(tx.amount) > 0;
           const isYCombinator = Boolean(tx.isYCombinator);
           const isOutgoingTransfer = tx.direction === 'debit' && Boolean(tx.recipient);
-          const formattedAmount = `${isCredit ? '+' : '-'}$${Math.abs(Number(tx.amount) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+          const isINR = tx.currency === 'INR' || (!tx.currency && Math.abs(Number(tx.amount)) > 10000);
+          const formattedAmount = isINR
+            ? `${isCredit ? '+' : '-'}₹${Math.round(Math.abs(Number(tx.amount) || 0)).toLocaleString('en-IN')}`
+            : `${isCredit ? '+' : '-'}$${Math.abs(Number(tx.amount) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
           const detailLabel = isYCombinator
             ? 'View investment details'
             : isOutgoingTransfer

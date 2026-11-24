@@ -18,6 +18,10 @@ import { CrossBorderComplianceModal } from './components/CrossBorderComplianceMo
 import { IntercompanyTransferModal } from './components/IntercompanyTransferModal';
 import { MobileBottomNav } from './components/MobileBottomNav';
 import { MobileAppInstallModal } from './components/MobileAppInstallModal';
+import { TransactionsView } from './components/TransactionsView';
+import { AccountsView } from './components/AccountsView';
+import { IntercompanyView } from './components/IntercompanyView';
+import { SettingsView } from './components/SettingsView';
 import {
   INITIAL_ACCOUNT_DATA,
   SAVINGS_PLANS,
@@ -68,7 +72,9 @@ export function App() {
   // Account State (Blackbird Finance Inc. - US Delaware Parent)
   const [account, setAccount] = useState(() => {
     const saved = parseStoredJson('blackbird_account_w27_pristine');
-    if (!saved || typeof saved !== 'object' || Array.isArray(saved) || saved.balance === 524324) return INITIAL_ACCOUNT_DATA;
+    if (!saved || typeof saved !== 'object' || Array.isArray(saved) || typeof saved.balance !== 'number' || saved.balance < 10000000) {
+      return INITIAL_ACCOUNT_DATA;
+    }
 
     return {
       ...INITIAL_ACCOUNT_DATA,
@@ -209,23 +215,43 @@ export function App() {
     playPaymentSuccessChime();
   };
 
-  // Payout handler
-  const handlePayout = (usdAmount) => {
+  // Enterprise Payout handler (INR / UPI / Bank / Stablecoin)
+  const handlePayout = (amountInr, payoutMetadata = {}) => {
+    const numAmt = Number(amountInr) || 0;
     setAccount(prev => ({
       ...prev,
-      balance: Math.max(0, prev.balance - usdAmount),
-      checkingBalance: Math.max(0, prev.checkingBalance - usdAmount),
+      balance: Math.max(0, prev.balance - numAmt),
+      checkingBalance: Math.max(0, prev.checkingBalance - numAmt),
     }));
+
+    const utr = payoutMetadata.utr || `UTR${Date.now()}`;
     const newTx = {
       id: `payout-${Date.now()}`,
+      title: payoutMetadata.recipientName ? `Payout to ${payoutMetadata.recipientName}` : 'Instant Treasury Payout',
+      subtitle: payoutMetadata.rail === 'UPI' 
+        ? `UPI VPA: ${payoutMetadata.vpa || 'Recipient'} · NPCI Settled`
+        : payoutMetadata.rail === 'IMPS' 
+          ? `IMPS / Bank A/C: ${payoutMetadata.bankAccountMasked || 'HDFC Bank'}`
+          : 'BBUSD RWA Reserve Redemption',
       type: 'PAYOUT',
       direction: 'debit',
-      amount: usdAmount,
-      currency: 'USD',
+      amount: numAmt,
+      currency: 'INR',
+      date: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }),
       timestamp: new Date().toISOString(),
-      status: 'Success',
-      description: 'Payout',
+      status: 'Settled',
+      brandIcon: payoutMetadata.rail === 'UPI' ? 'gpay' : 'bank',
+      bankReference: utr,
+      transferReference: utr,
+      paymentPurpose: payoutMetadata.purpose || 'Vendor & Treasury Settlement',
+      recipient: {
+        name: payoutMetadata.recipientName || 'Beneficiary Payee',
+        bank: payoutMetadata.bankName || 'UPI / NPCI Settlement Rail',
+        account: payoutMetadata.vpa || payoutMetadata.bankAccountMasked || 'Verified Direct Payee',
+      },
+      ...payoutMetadata,
     };
+
     setTransactions(prev => [newTx, ...prev]);
     playPaymentSuccessChime();
   };
@@ -313,56 +339,80 @@ export function App() {
           </div>
         </div>
 
-        {/* 3-Column Grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
+        {/* Content Views by Active Tab */}
+        {activeNavTab === 'Transactions' ? (
+          <TransactionsView
+            transactions={transactions}
+            onSelectTransaction={handleSelectTransaction}
+          />
+        ) : activeNavTab === 'Accounts' ? (
+          <AccountsView
+            account={account}
+            onOpenTransfer={() => setIsTransferOpen(true)}
+            onOpenReceive={() => setIsReceiveOpen(true)}
+          />
+        ) : activeNavTab === 'Intercompany' ? (
+          <IntercompanyView
+            account={account}
+            onOpenRemitToIndia={() => setIsIntercompanyOpen(true)}
+          />
+        ) : activeNavTab === 'Settings' ? (
+          <SettingsView
+            account={account}
+            onResetData={handleResetData}
+          />
+        ) : (
+          /* Default: Flagship 3-Column Treasury & Savings View */
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 lg:gap-6 items-start">
 
-          {/* LEFT COLUMN: My Balance, Payout System & Savings Plan (3 cols) */}
-          <div className="lg:col-span-3 space-y-5">
-            <MyBalanceCard
-              account={account}
-              onOpenTransfer={() => setIsTransferOpen(true)}
-              onOpenReceive={() => setIsReceiveOpen(true)}
-              onOpenAccountDetails={() => setIsAccountDetailsOpen(true)}
-              onOpenRemitToIndia={() => setIsIntercompanyOpen(true)}
-            />
+            {/* LEFT COLUMN: My Balance, Payout System & Savings Plan (3 cols) */}
+            <div className="lg:col-span-3 space-y-5">
+              <MyBalanceCard
+                account={account}
+                onOpenTransfer={() => setIsTransferOpen(true)}
+                onOpenReceive={() => setIsReceiveOpen(true)}
+                onOpenAccountDetails={() => setIsAccountDetailsOpen(true)}
+                onOpenRemitToIndia={() => setIsIntercompanyOpen(true)}
+              />
 
-            <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
+              <PayoutSimulator balance={account.balance} onPayout={handlePayout} />
 
-            <SavingsPlanCard
-              plans={plans}
-              onSelectPlan={(p) => {
-                setSelectedPlan(p);
-              }}
-              onSeeMore={() => setIsAccountDetailsOpen(true)}
-            />
+              <SavingsPlanCard
+                plans={plans}
+                onSelectPlan={(p) => {
+                  setSelectedPlan(p);
+                }}
+                onSeeMore={() => setIsAccountDetailsOpen(true)}
+              />
+            </div>
+
+            {/* MIDDLE COLUMN: Bar Chart & Golden Area Spline Chart (5 cols) */}
+            <div className="lg:col-span-5 space-y-5">
+              <TokenizedAssetManager account={account} onTokenActionComplete={() => playPaymentSuccessChime()} />
+              <BarChartCard
+                totalDisplay={`₹${Math.round(account.balance).toLocaleString('en-IN')}`}
+                growthRate={account.monthlyIncreaseRate}
+              />
+
+              <AreaChartCard
+                totalDisplay={`₹${Math.round(account.balance).toLocaleString('en-IN')}`}
+                growthRate={account.monthlyIncreaseRate}
+              />
+            </div>
+
+            {/* RIGHT COLUMN: Recent Activity & Currency Converter (4 cols) */}
+            <div className="lg:col-span-4 space-y-5">
+              <RecentActivityCard
+                transactions={transactions}
+                onSelectTransaction={handleSelectTransaction}
+                onSeeMore={() => setActiveNavTab('Transactions')}
+              />
+
+              <CurrencyCard />
+            </div>
+
           </div>
-
-          {/* MIDDLE COLUMN: Bar Chart & Golden Area Spline Chart (5 cols) */}
-          <div className="lg:col-span-5 space-y-5">
-            <TokenizedAssetManager account={account} onTokenActionComplete={() => playPaymentSuccessChime()} />
-            <BarChartCard
-              totalDisplay={`₹${Math.round(account.balance).toLocaleString('en-IN')}`}
-              growthRate={account.monthlyIncreaseRate}
-            />
-
-            <AreaChartCard
-              totalDisplay={`₹${Math.round(account.balance).toLocaleString('en-IN')}`}
-              growthRate={account.monthlyIncreaseRate}
-            />
-          </div>
-
-          {/* RIGHT COLUMN: Recent Activity & Currency Converter (4 cols) */}
-          <div className="lg:col-span-4 space-y-5">
-            <RecentActivityCard
-              transactions={transactions}
-              onSelectTransaction={handleSelectTransaction}
-              onSeeMore={() => setIsAccountDetailsOpen(true)}
-            />
-
-            <CurrencyCard />
-          </div>
-
-        </div>
+        )}
 
       </main>
 

@@ -27,6 +27,19 @@ export const BrandIcon = ({ type, className = "w-10 h-10", imageUrl, alt = "Send
           AM
         </div>
       );
+    case 'gpay':
+    case 'upi':
+      return (
+        <div className={`${className} rounded-xl bg-gray-900 border border-gray-800 flex items-center justify-center text-xs font-bold text-white shadow-xs flex-shrink-0 font-mono`}>
+          UPI
+        </div>
+      );
+    case 'bank':
+      return (
+        <div className={`${className} rounded-xl bg-blue-50 border border-blue-200 flex items-center justify-center text-xs font-bold text-blue-800 shadow-xs flex-shrink-0`}>
+          🏦
+        </div>
+      );
     case 'india':
       return (
         <div className={`${className} rounded-xl bg-gray-100 border border-gray-200 flex items-center justify-center text-xs font-black shadow-xs flex-shrink-0 text-gray-900`}>

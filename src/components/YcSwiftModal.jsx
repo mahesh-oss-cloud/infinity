@@ -4,8 +4,10 @@ import { X, CheckCircle2, Printer, FileText, CalendarDays } from 'lucide-react';
 export const YcSwiftModal = ({ isOpen, onClose, transaction }) => {
   if (!isOpen || !transaction) return null;
 
-  const amount = Math.abs(Number(transaction.amount) || 500000);
+  const amountUsd = Number(transaction.amountUsd) || (Number(transaction.amount) > 1000000 ? Math.round(Number(transaction.amount) / 92.90) : Number(transaction.amount)) || 500000;
+  const amountInr = Number(transaction.amountInr) || (Number(transaction.amount) > 1000000 ? Number(transaction.amount) : Math.round(amountUsd * 92.90));
   const formatMoney = (value) => '$' + Number(value).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  const formatInr = (value) => '₹' + Number(value).toLocaleString('en-IN', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
@@ -27,7 +29,8 @@ export const YcSwiftModal = ({ isOpen, onClose, transaction }) => {
           <div className="p-5 rounded-2xl bg-gray-50 border border-gray-200 text-center">
             <div className="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto mb-2"><CheckCircle2 className="w-6 h-6" /></div>
             <div className="text-[11px] font-bold text-gray-700 uppercase tracking-wider">Investment amount</div>
-            <div className="text-4xl sm:text-5xl font-normal text-gray-950 mt-1 font-instrument">{formatMoney(amount)} <span className="text-sm font-sans font-semibold text-gray-500">USD</span></div>
+            <div className="text-4xl sm:text-5xl font-normal text-gray-950 mt-1 font-instrument">{formatMoney(amountUsd)} <span className="text-sm font-sans font-semibold text-gray-500">USD</span></div>
+            <div className="text-sm font-semibold text-emerald-700 mt-1">{formatInr(amountInr)} INR (Converted @ ₹92.90 / USD)</div>
             <p className="text-xs text-gray-600 mt-1">Beneficiary: <strong>Blackbird Finance Inc.</strong></p>
             <div className="mt-2.5 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-amber-50 text-amber-900 border border-amber-200 text-[11px] font-semibold"><CalendarDays className="w-3.5 h-3.5" /> Received date: {transaction.date || '10/07/26'}</div>
           </div>
