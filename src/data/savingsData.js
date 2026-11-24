@@ -1,4 +1,5 @@
 // Authentic Y Combinator W27 Treasury Data for Blackbird Finance Inc.
+// Converted to INR at current market conversion rate (1 USD = ₹92.90)
 
 export const INITIAL_ACCOUNT_DATA = {
   companyName: 'Blackbird Finance',
@@ -31,31 +32,38 @@ export const INITIAL_ACCOUNT_DATA = {
   bankAddress: '555 California St, Suite 400, San Francisco, CA 94104',
   fdicInsurance: '$5,000,000 (Via Mercury Vault Multi-Bank Sweep Network)',
   
-  // Account balance summary.
-  checkingBalance: 74324.00,
-  treasuryYieldBalance: 450000.00,
+  // Account balance summary in INR (Converted from $500,000 YC W27 SAFE @ ₹92.90 / USD)
+  checkingBalance: 46450000.00, // ₹4,64,50,000 (Full 500k USD in INR)
+  treasuryYieldBalance: 0.00,
   treasuryApy: '4.75% APY',
-  treasuryFundName: 'US Treasury Bills (T-Bills)',
-  monthlyTreasuryYieldEstimate: 1781.25,
+  treasuryFundName: 'Liquid Treasury Reserve',
+  monthlyTreasuryYieldEstimate: 183864.00,
 
-  // $500,000 YC receipt + $24,324 incoming transfer = $524,324 total.
-  balance: 524324.00,
-  monthlyIncreaseRate: '2 credits',
-  growthLabel: 'Incoming funding',
+  // ₹4,64,50,000 (exact equivalent of $500,000 USD at market rate ₹92.90)
+  balance: 46450000.00,
+  monthlyIncreaseRate: '1 credit',
+  growthLabel: 'YC W27 Investment',
   cardBrand: 'mastercard',
 
   // YC Standard Deal Breakdown
   ycDeal: {
     batch: 'Winter 2027 (W27)',
-    totalInvestment: 500000.00,
+    totalInvestmentUsd: 500000.00,
+    totalInvestmentInr: 46450000.00,
+    totalInvestment: 46450000.00,
+    conversionRate: 92.90,
     tranche1: {
-      amount: 125000.00,
+      amountUsd: 125000.00,
+      amountInr: 11612500.00,
+      amount: 11612500.00,
       instrument: 'Post-Money SAFE',
       equityPercent: '7.0%',
       valuationCap: 'Post-Money SAFE Cap',
     },
     tranche2: {
-      amount: 375000.00,
+      amountUsd: 375000.00,
+      amountInr: 34837500.00,
+      amount: 34837500.00,
       instrument: 'Uncapped MFN SAFE',
       equityPercent: 'MFN (Takes best terms of next SAFE)',
       valuationCap: 'Uncapped',
@@ -64,22 +72,22 @@ export const INITIAL_ACCOUNT_DATA = {
   }
 };
 
-// Authentic Startup Treasury Allocation Plans (NO consumer placeholders!)
+// Authentic Startup Treasury Allocation Plans in INR
 export const SAVINGS_PLANS = [
   {
     id: 'sp-1',
     name: 'Payroll & India Runway',
-    allocated: 200000.00,
-    target: 250000.00,
+    allocated: 18580000.00, // ₹1,85,80,000 ($200,000 USD equivalent)
+    target: 23225000.00,
     category: '12-Month Burn',
     iconType: 'building',
-    note: 'Intercompany Service Fees (Cost-Plus 10%) for Bengaluru Engineering Team',
+    note: 'Intercompany Service Fees for Bengaluru Engineering Team',
   },
   {
     id: 'sp-2',
     name: 'YC W27 Program & GTM',
-    allocated: 75000.00,
-    target: 100000.00,
+    allocated: 6967500.00, // ₹69,67,500 ($75,000 USD equivalent)
+    target: 9290000.00,
     category: 'Batch Program',
     iconType: 'rocket',
     note: 'SF batch attendance, investor meetings, and customer acquisition',
@@ -87,67 +95,42 @@ export const SAVINGS_PLANS = [
   {
     id: 'sp-3',
     name: 'GPU & Cloud Compute',
-    allocated: 50000.00,
-    target: 75000.00,
+    allocated: 4645000.00, // ₹46,45,000 ($50,000 USD equivalent)
+    target: 6967500.00,
     category: 'Infrastructure',
     iconType: 'cpu',
     note: 'AWS, Google Cloud & GPU cluster inference runway',
   },
   {
     id: 'sp-4',
-    name: 'Mercury Treasury Vault',
-    allocated: 150000.00,
-    target: 200000.00,
+    name: 'Treasury High-Yield Reserve',
+    allocated: 13935000.00, // ₹1,39,35,000 ($150,000 USD equivalent)
+    target: 18580000.00,
     category: 'Yield (5.02% APY)',
     iconType: 'vault',
-    note: 'Idle cash earning daily accrued yield in Vanguard VUSXX',
+    note: 'Accrued overnight treasury liquidity reserve',
   },
   {
     id: 'sp-5',
-    name: 'Legal, Tax & Delaware',
-    allocated: 25000.00,
-    target: 30000.00,
+    name: 'Legal, Tax & Corporate',
+    allocated: 2322500.00, // ₹23,22,500 ($25,000 USD equivalent)
+    target: 2787000.00,
     category: 'Compliance',
     iconType: 'scale',
-    note: 'Delaware annual franchise tax, 83(b) elections & CA FEMA advisory',
-  },
-  {
-    id: 'sp-6',
-    name: 'Operating Working Capital',
-    allocated: 24324.00,
-    target: 50000.00,
-    category: 'Liquid Checking',
-    iconType: 'layers',
-    note: 'Immediate operational and contractor liquidity',
+    note: 'Delaware franchise tax, 83(b) elections & RBI/FEMA filing',
   },
 ];
 
-// Incoming funding records entered from the account holder's supplied details.
+// Single official incoming funding record: Y Combinator W27 SAFE ($500,000 -> ₹4,64,50,000)
 export const INITIAL_TRANSACTIONS = [
-  {
-    id: 'tx-anupam-mittal-24324',
-    title: 'Anupam Mittal',
-    subtitle: 'Transfer received',
-    category: 'Transfer received',
-    amount: 24324.00,
-    type: 'BANK_TRANSFER_IN',
-    direction: 'credit',
-    date: '10/20/26',
-    timestamp: '2026-10-20T12:00:00Z',
-    status: 'Transfer received',
-    sender: { name: 'Anupam Mittal', avatarUrl: 'https://upload.wikimedia.org/wikipedia/commons/8/8c/Anupam_Mittal.jpg' },
-    bankReference: 'SBINH22149832104',
-    recordSource: 'Account holder entry',
-    memo: 'Incoming transfer received on October 20, 2026.',
-    brandIcon: 'person',
-    isAnupamMittalTransfer: true,
-  },
   {
     id: 'tx-yc-w27-500k',
     title: 'Y Combinator',
-    subtitle: 'W27 Standard Deal · Fedwire transfer received',
+    subtitle: 'W27 Standard Deal · Fedwire received ($500,000 converted to INR)',
     category: 'Venture Capital',
-    amount: 500000.00,
+    amount: 46450000.00,
+    amountUsd: 500000.00,
+    conversionRate: 92.90,
     type: 'FEDWIRE_INWARD',
     direction: 'credit',
     date: '10/07/26',
@@ -161,77 +144,70 @@ export const INITIAL_TRANSACTIONS = [
       routingNumber: '121140399',
     },
     beneficiary: {
-      name: 'Blackbird Finance Inc.',
+      name: 'Blackbird Finance Inc. / Subsidiary Account',
       account: '718940291845',
       bank: 'Choice Financial Group (Mercury)',
       swiftCode: 'MERCUS33XXX',
       routingNumber: '121000358',
     },
-    transferMethod: 'Fedwire inward funds transfer',
+    transferMethod: 'Fedwire funds transfer (Converted to INR)',
     swiftReference: 'YC-W27-FEDWIRE-500K-89210',
     imad: '20270115B1Q8472900192',
     omad: '20270115B1Q8472900192',
     busFunctionCode: 'BTR',
-    recordSource: 'Previously saved investment record',
-    memo: '$125,000 post-money SAFE for 7% + $375,000 uncapped MFN SAFE.',
+    recordSource: 'Official YC W27 SAFE Agreement',
+    memo: '$500,000 USD converted at market rate ₹92.90 = ₹4,64,50,000.',
     brandIcon: 'yc',
     isYCombinator: true,
   },
 ];
 
 export const MONTHLY_CHART_DATA = [
-  { month: 'Jan', value: 500000, heightPercent: 100, isCurrent: true, label: '$500K YC W27' },
-  { month: 'Feb', value: 485000, heightPercent: 92 },
-  { month: 'Mar', value: 465000, heightPercent: 88 },
-  { month: 'Apr', value: 440000, heightPercent: 82 },
-  { month: 'May', value: 415000, heightPercent: 78 },
-  { month: 'Jun', value: 390000, heightPercent: 73 },
-  { month: 'Jul', value: 365000, heightPercent: 68 },
-  { month: 'Aug', value: 340000, heightPercent: 64 },
-  { month: 'Sep', value: 315000, heightPercent: 60 },
+  { month: 'Jan', value: 46450000, heightPercent: 100, isCurrent: true, label: '₹4.64 Cr YC W27' },
+  { month: 'Feb', value: 45055000, heightPercent: 92 },
+  { month: 'Mar', value: 43200000, heightPercent: 88 },
+  { month: 'Apr', value: 40876000, heightPercent: 82 },
+  { month: 'May', value: 38550000, heightPercent: 78 },
+  { month: 'Jun', value: 36230000, heightPercent: 73 },
+  { month: 'Jul', value: 33900000, heightPercent: 68 },
+  { month: 'Aug', value: 31580000, heightPercent: 64 },
+  { month: 'Sep', value: 29260000, heightPercent: 60 },
 ];
 
-// RECENT Real Exchange Rates (Updated for 2026/2027)
+// Market Exchange Rates
 export const CURRENCY_RATES = [
   {
     code: 'INR',
-    name: 'Indian Rupee (Subsidiary)',
-    rate: 88.75,
+    name: 'Indian Rupee (Base Currency)',
+    rate: 1.0,
     flag: 'in',
     symbol: '₹',
   },
   {
+    code: 'USD',
+    name: 'US Dollar',
+    rate: 0.01076,
+    flag: 'us',
+    symbol: '$',
+  },
+  {
     code: 'EUR',
     name: 'Euro',
-    rate: 0.91,
+    rate: 0.01016,
     flag: 'eu',
     symbol: '€',
   },
   {
     code: 'GBP',
     name: 'British Pound',
-    rate: 0.76,
+    rate: 0.00845,
     flag: 'gb',
     symbol: '£',
   },
   {
-    code: 'IDR',
-    name: 'Indonesian Rupiah',
-    rate: 16250.00,
-    flag: 'id',
-    symbol: 'Rp',
-  },
-  {
-    code: 'CNY',
-    name: 'Chinese Yuan',
-    rate: 7.12,
-    flag: 'cn',
-    symbol: '¥',
-  },
-  {
     code: 'SGD',
     name: 'Singapore Dollar',
-    rate: 1.31,
+    rate: 0.0145,
     flag: 'sg',
     symbol: 'S$',
   },

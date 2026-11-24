@@ -8,9 +8,10 @@ export const MyBalanceCard = ({
   onOpenAccountDetails,
   onOpenRemitToIndia 
 }) => {
-  // Format currency with commas: e.g. $524,324
+  // Format currency with Indian / International number comma grouping
   const totalBalance = Number(account.checkingBalance || 0) + Number(account.treasuryYieldBalance || 0);
-  const formattedBalance = Math.round(totalBalance).toLocaleString('en-US');
+  const formattedBalance = Math.round(totalBalance).toLocaleString('en-IN');
+  const usdEquivalent = Math.round(totalBalance / 92.90).toLocaleString('en-US');
 
   return (
     <div className="bg-white rounded-3xl p-6 sm:p-7 border border-gray-200/80 shadow-[0_2px_15px_rgba(0,0,0,0.02)]">
@@ -22,7 +23,7 @@ export const MyBalanceCard = ({
             Total Liquid Balance
           </h3>
           <span className="text-[11px] text-gray-900 font-medium font-waldenburg">
-            Delaware C-Corp • Funding Account
+            YC Treasury • Converted to INR (₹92.90 / USD)
           </span>
         </div>
 
@@ -44,11 +45,16 @@ export const MyBalanceCard = ({
         </button>
       </div>
 
-      {/* Main Dollar Balance Display in Instrument Serif */}
-      <div className="mb-2">
+      {/* Main Rupee Balance Display in Instrument Serif */}
+      <div className="mb-1">
         <h2 className="text-4xl sm:text-5xl font-normal text-gray-950 tracking-tight font-instrument">
-          ${formattedBalance}
+          ₹{formattedBalance}
         </h2>
+      </div>
+
+      {/* USD Market conversion subtitle */}
+      <div className="text-xs text-gray-500 font-waldenburg mb-3">
+        Equivalent to <strong className="text-gray-900 font-medium">${usdEquivalent} USD</strong> at live market conversion rate
       </div>
 
       {/* Monthly Growth Pill */}
@@ -58,30 +64,30 @@ export const MyBalanceCard = ({
           <span className="font-instrument text-sm">{account.monthlyIncreaseRate}</span>
         </div>
         <span className="text-xs text-gray-500 font-waldenburg">
-          Y Combinator + incoming transfer
+          YC W27 Investment ($500k fully allocated)
         </span>
       </div>
 
-      {/* Idle Cash Treasury Breakdown Card (Clean Neutral, NO purple gradients!) */}
+      {/* Idle Cash Treasury Breakdown Card */}
       <div className="p-3.5 rounded-2xl bg-gray-50 border border-gray-200/80 mb-5 text-xs space-y-2 font-waldenburg">
         <div className="flex justify-between items-center text-gray-600">
-          <span className="font-waldenburg">Checking Liquidity:</span>
+          <span className="font-waldenburg">Available Liquid Runway:</span>
           <span className="font-normal text-gray-900 font-instrument text-base">
-            ${Math.round(account.checkingBalance).toLocaleString('en-US')}
+            ₹{Math.round(account.checkingBalance).toLocaleString('en-IN')}
           </span>
         </div>
         <div className="flex justify-between items-center pt-1.5 border-t border-gray-200/60">
           <span className="text-gray-900 font-medium flex items-center gap-1.5 font-waldenburg">
             <Landmark className="w-3.5 h-3.5 text-gray-700" />
-            <span>Treasury allocation:</span>
+            <span>USD SAFE Origin:</span>
           </span>
           <span className="font-normal text-gray-900 font-instrument text-base">
-            ${Math.round(account.treasuryYieldBalance).toLocaleString('en-US')}
+            $500,000.00
           </span>
         </div>
       </div>
 
-      {/* Action Buttons: Transfer & Receive (Authoritative Clean Black / White styling) */}
+      {/* Action Buttons: Transfer & Receive */}
       <div className="grid grid-cols-2 gap-2.5 mb-3">
         {/* Transfer Button */}
         <button
@@ -91,7 +97,7 @@ export const MyBalanceCard = ({
           <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor">
             <path d="M7 17l9.2-9.2M17 17V7.8H7.8" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
-          <span>Transfer Wire</span>
+          <span>Transfer Funds</span>
         </button>
 
         {/* Receive / Wire Instructions Button */}
@@ -99,21 +105,10 @@ export const MyBalanceCard = ({
           onClick={onOpenReceive}
           className="flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-white hover:bg-gray-50 text-gray-900 border border-gray-300 text-xs font-medium transition-all active:scale-[0.98] cursor-pointer shadow-xs"
         >
-          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-[2.2]" fill="none" stroke="currentColor">
-            <path d="M17 7L7.8 16.2M7.8 7v9.2H17" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-          <span>Wire Info</span>
+          <ArrowDownLeft className="w-3.5 h-3.5 stroke-[2.2]" />
+          <span>Receive Details</span>
         </button>
       </div>
-
-      {/* Remit Runway to Indian Subsidiary Button */}
-      <button
-        onClick={onOpenRemitToIndia}
-        className="w-full py-2.5 px-3 rounded-xl bg-gray-50 hover:bg-gray-100 border border-gray-200 text-gray-900 text-xs font-semibold transition-all flex items-center justify-center gap-2 cursor-pointer"
-      >
-        <span>🇮🇳 Intercompany Remittance to India</span>
-        <ArrowUpRight className="w-3.5 h-3.5 text-gray-500" />
-      </button>
 
     </div>
   );

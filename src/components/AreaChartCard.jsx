@@ -1,7 +1,7 @@
 import React from 'react';
 import { TrendingUp } from 'lucide-react';
 
-export const AreaChartCard = ({ totalDisplay = "$524,324", growthRate = "25.7%" }) => {
+export const AreaChartCard = ({ totalDisplay = "₹4,64,50,000", growthRate = "25.7%" }) => {
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep'];
 
   return (
@@ -15,7 +15,7 @@ export const AreaChartCard = ({ totalDisplay = "$524,324", growthRate = "25.7%" 
         <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-700 mt-1 font-waldenburg">
           <TrendingUp className="w-3.5 h-3.5 stroke-[2.5]" />
           <span className="font-instrument text-sm">{growthRate}</span>
-          <span className="text-gray-500 font-medium ml-1 font-waldenburg">Runway Projection (18+ Months)</span>
+          <span className="text-gray-500 font-medium ml-1 font-waldenburg">Runway Projection (18+ Months in INR)</span>
         </div>
       </div>
 
@@ -26,17 +26,17 @@ export const AreaChartCard = ({ totalDisplay = "$524,324", growthRate = "25.7%" 
         <div className="relative h-40 w-full">
           
           <div className="absolute left-0 top-2 text-[11px] text-gray-400 font-medium font-mono">
-            $500k
+            ₹4.6Cr
           </div>
           <div className="absolute left-0 top-16 text-[11px] text-gray-400 font-medium font-mono">
-            $350k
+            ₹3.5Cr
           </div>
           <div className="absolute left-0 bottom-4 text-[11px] text-gray-400 font-medium font-mono">
-            $200k
+            ₹2.0Cr
           </div>
 
           {/* SVG Smooth Area with warm amber gradient */}
-          <div className="absolute inset-0 left-12 right-2 bottom-4">
+          <div className="absolute inset-0 left-14 right-2 bottom-4">
             <svg viewBox="0 0 500 130" className="w-full h-full overflow-visible" preserveAspectRatio="none">
               <defs>
                 <linearGradient id="amberGradient" x1="0" y1="0" x2="0" y2="1">
@@ -48,43 +48,41 @@ export const AreaChartCard = ({ totalDisplay = "$524,324", growthRate = "25.7%" 
 
               {/* Filled Area */}
               <path
-                d="M 10 30 
-                   C 60 35, 100 45, 150 50 
-                   C 200 55, 250 65, 300 70 
-                   C 350 75, 400 85, 450 90 
-                   L 485 95 
-                   L 485 130 
-                   L 10 130 Z"
+                d="M 0 10 
+                   C 60 15, 100 28, 160 38 
+                   C 220 48, 280 62, 340 78 
+                   C 400 95, 450 110, 500 120 
+                   L 500 130 
+                   L 0 130 Z"
                 fill="url(#amberGradient)"
               />
 
-              {/* The Golden Line */}
+              {/* Top Smooth Spline Line */}
               <path
-                d="M 10 30 
-                   C 60 35, 100 45, 150 50 
-                   C 200 55, 250 65, 300 70 
-                   C 350 75, 400 85, 450 90 
-                   L 485 95"
+                d="M 0 10 
+                   C 60 15, 100 28, 160 38 
+                   C 220 48, 280 62, 340 78 
+                   C 400 95, 450 110, 500 120"
                 fill="none"
                 stroke="#f59e0b"
                 strokeWidth="2.5"
                 strokeLinecap="round"
               />
 
-              {/* Peak node */}
-              <circle cx="10" cy="30" r="4.5" fill="#f59e0b" stroke="#ffffff" strokeWidth="2" />
-              <circle cx="150" cy="50" r="3" fill="#ffffff" stroke="#f59e0b" strokeWidth="2" />
-              <circle cx="300" cy="70" r="3" fill="#ffffff" stroke="#f59e0b" strokeWidth="2" />
-              <circle cx="485" cy="95" r="3" fill="#ffffff" stroke="#f59e0b" strokeWidth="2" />
+              {/* Highlighting Pulse Point at Starting Peak */}
+              <circle cx="0" cy="10" r="4.5" fill="#f59e0b" className="animate-pulse" />
+              <circle cx="0" cy="10" r="2" fill="#ffffff" />
             </svg>
           </div>
 
         </div>
 
-        {/* X-Axis Months */}
-        <div className="flex justify-between pl-12 pr-2 pt-1 text-[11px] text-gray-500 font-medium">
-          {months.map((m) => (
-            <span key={m}>{m}</span>
+        {/* X-Axis Month Labels */}
+        <div className="flex justify-between pl-14 pr-2 pt-2 text-[11px] text-gray-400 font-medium border-t border-gray-100 font-waldenburg">
+          {months.map((m, idx) => (
+            <span key={m} className={idx === 0 ? "text-gray-900 font-bold" : ""}>
+              {m}
+            </span>
           ))}
         </div>
 

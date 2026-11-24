@@ -144,6 +144,10 @@ export function App() {
     safeStorageRemove('blackbird_account_w27');
     safeStorageRemove('blackbird_transactions_w27');
     safeStorageRemove('blackbird_plans_w27');
+    // Refresh pristine converted INR state
+    safeStorageRemove('blackbird_account_w27_pristine');
+    safeStorageRemove('blackbird_transactions_w27_pristine');
+    safeStorageRemove('blackbird_plans_w27_pristine');
   }, []);
 
   // Persistence
@@ -271,7 +275,7 @@ export function App() {
                 </span>
               </div>
               <p className="text-[11px] text-gray-500 mt-0.5 font-waldenburg">
-                Venture Bank: <strong>{account.bankingPartner}</strong> • $500,000 YC W27 Investment Record • Treasury Yield: <strong className="font-instrument text-xs text-gray-900">{account.treasuryApy}</strong>
+                Venture Bank: <strong>{account.bankingPartner}</strong> • ₹4,64,50,000 (YC $500k SAFE @ ₹92.90) • Treasury Yield: <strong className="font-instrument text-xs text-gray-900">{account.treasuryApy}</strong>
               </p>
             </div>
           </div>
@@ -303,7 +307,7 @@ export function App() {
               title="Revert accidental transactions and restore original $500k YC balance"
             >
               <RotateCcw className="w-3.5 h-3.5 text-gray-500" />
-              <span>Revert to $500k</span>
+              <span>Reset to ₹4.64 Cr ($500k)</span>
             </button>
           </div>
         </div>
@@ -336,12 +340,12 @@ export function App() {
           <div className="lg:col-span-5 space-y-5">
             <TokenizedAssetManager account={account} onTokenActionComplete={() => playPaymentSuccessChime()} />
             <BarChartCard
-              totalDisplay={`$${Math.round(account.balance).toLocaleString('en-US')}`}
+              totalDisplay={`₹${Math.round(account.balance).toLocaleString('en-IN')}`}
               growthRate={account.monthlyIncreaseRate}
             />
 
             <AreaChartCard
-              totalDisplay={`$${Math.round(account.balance).toLocaleString('en-US')}`}
+              totalDisplay={`₹${Math.round(account.balance).toLocaleString('en-IN')}`}
               growthRate={account.monthlyIncreaseRate}
             />
           </div>

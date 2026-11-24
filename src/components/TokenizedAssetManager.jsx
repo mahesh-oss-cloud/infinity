@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ShieldCheck, Coins, ArrowUpRight, ArrowDownLeft, FileText, CheckCircle, ExternalLink } from 'lucide-react';
+import { ShieldCheck, Coins, ArrowUpRight, ArrowDownLeft, CheckCircle } from 'lucide-react';
 import { TOKEN_CONFIG, calculateBackingStatus, executeReserveMint, executeTokenRedemption } from '../services/tokenizationEngine';
 
 export function TokenizedAssetManager({ account, onTokenActionComplete }) {
@@ -10,9 +10,11 @@ export function TokenizedAssetManager({ account, onTokenActionComplete }) {
   const [isProcessing, setIsProcessing] = useState(false);
   const [feedback, setFeedback] = useState(null);
 
-  const reserveBalance = account?.balance || 524324;
-  const tokenSupply = 450000; // Audited tokenized tranche allocation
-  const backing = calculateBackingStatus(reserveBalance, tokenSupply);
+  const reserveBalance = account?.balance || 46450000;
+  // Converted reserve in USD
+  const reserveUsd = Math.round(reserveBalance / 92.90);
+  const tokenSupply = 500000; // $500,000 USD institutional tranche allocation
+  const backing = calculateBackingStatus(reserveUsd, tokenSupply);
 
   const handleMint = async (e) => {
     e.preventDefault();
@@ -46,13 +48,13 @@ export function TokenizedAssetManager({ account, onTokenActionComplete }) {
     try {
       const res = await executeTokenRedemption({
         tokenAmountBbusd: Number(redeemAmount),
-        bankAccountMasked: account?.indianSubsidiary?.accountMasked || '**** 4921',
+        bankAccountMasked: account?.indianSubsidiary?.accountMasked || '•••• 4921',
         ifscRouting: account?.indianSubsidiary?.ifsc || 'HDFC0001234',
       });
       setFeedback({
         type: 'success',
         title: 'Redemption & Burn Processed',
-        details: `Burned ${Number(redeemAmount).toLocaleString()} ${TOKEN_CONFIG.symbol}. Outgoing Wire queued to clearing partner.`,
+        details: `Burned ${Number(redeemAmount).toLocaleString()} ${TOKEN_CONFIG.symbol}. Outgoing Wire queued to clearing partner in INR.`,
         txHash: res.burnTxHash,
       });
       setRedeemAmount('');
@@ -82,7 +84,7 @@ export function TokenizedAssetManager({ account, onTokenActionComplete }) {
               </span>
             </div>
             <p className="text-xs text-gray-500 mt-0.5">
-              Network: {TOKEN_CONFIG.network} • 1:1 Treasury Vault Backed
+              Network: {TOKEN_CONFIG.network} • 1:1 Treasury Vault Backed ($500k USD / ₹4.64 Cr)
             </p>
           </div>
         </div>
@@ -121,8 +123,9 @@ export function TokenizedAssetManager({ account, onTokenActionComplete }) {
         <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
           <p className="text-[11px] text-gray-500 uppercase font-medium">Verified Reserve</p>
           <p className="text-sm font-semibold text-gray-900 mt-1 font-instrument">
-            ${backing.reserveUsd.toLocaleString('en-US', { minimumFractionDigits: 2 })}
+            ₹{reserveBalance.toLocaleString('en-IN')}
           </p>
+          <p className="text-[10px] text-gray-400 mt-0.5">($500,000 USD)</p>
         </div>
         <div className="p-3 bg-gray-50 rounded-xl border border-gray-100">
           <p className="text-[11px] text-gray-500 uppercase font-medium">Tokenized Supply</p>
@@ -173,7 +176,7 @@ export function TokenizedAssetManager({ account, onTokenActionComplete }) {
               Institutional Asset Tokenization Specification
             </div>
             <p className="text-gray-600 leading-relaxed text-[11px]">
-              Every issued unit of <strong>{TOKEN_CONFIG.symbol}</strong> is legally secured by USD fiat and short-term US Treasury Bills held in escrow under <strong>{TOKEN_CONFIG.custodianBank}</strong>. Transfers require registered KYC authorization on Polygon.
+              Every issued unit of <strong>{TOKEN_CONFIG.symbol}</strong> is legally secured by the $500,000 USD (₹4.64 Cr) treasury reserve held under <strong>{TOKEN_CONFIG.custodianBank}</strong>.
             </p>
           </div>
 
@@ -195,20 +198,20 @@ export function TokenizedAssetManager({ account, onTokenActionComplete }) {
         <form onSubmit={handleMint} className="space-y-3 text-xs">
           <div>
             <label className="block text-gray-700 font-medium mb-1">
-              Amount to Tokenize (USD)
+              Amount to Tokenize (USD equivalent)
             </label>
             <input
               type="number"
               required
               min="100"
-              max={reserveBalance}
+              max={500000}
               value={mintAmount}
               onChange={(e) => setMintAmount(e.target.value)}
               placeholder="e.g. 50000"
               className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 font-instrument"
             />
             <p className="text-[10px] text-gray-400 mt-1">
-              Available un-tokenized treasury reserve: ${(reserveBalance - tokenSupply > 0 ? reserveBalance - tokenSupply : 0).toLocaleString()} USD
+              Available treasury reserve: ₹{reserveBalance.toLocaleString('en-IN')} (equiv. $500,000 USD)
             </p>
           </div>
 
@@ -255,7 +258,7 @@ export function TokenizedAssetManager({ account, onTokenActionComplete }) {
           </div>
 
           <div className="p-2.5 bg-amber-50/60 border border-amber-200/80 rounded-lg text-[11px] text-amber-900">
-            Redemption burns the on-chain notes and routes the underlying fiat through RTGS / Fedwire to <strong>{account?.indianSubsidiary?.legalName || 'Subsidiary Bank'}</strong>.
+            Redemption burns the on-chain notes and routes the underlying fiat through RTGS / Direct Clearing to <strong>{account?.indianSubsidiary?.legalName || 'Subsidiary Bank'}</strong> in INR.
           </div>
 
           <button
@@ -264,7 +267,7 @@ export function TokenizedAssetManager({ account, onTokenActionComplete }) {
             className="w-full py-2.5 bg-gray-900 hover:bg-black text-white rounded-lg font-semibold flex items-center justify-center gap-1.5 transition-all cursor-pointer disabled:opacity-50"
           >
             <ArrowDownLeft className="w-4 h-4" />
-            {isProcessing ? 'Initiating Settlement...' : 'Redeem to Bank Wire'}
+            {isProcessing ? 'Initiating Settlement...' : 'Redeem to Bank Wire (INR)'}
           </button>
         </form>
       )}
